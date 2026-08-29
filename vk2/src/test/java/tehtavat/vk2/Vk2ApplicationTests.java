@@ -1,4 +1,4 @@
-package hh.backend.vk2;
+package tehtavat.vk2;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

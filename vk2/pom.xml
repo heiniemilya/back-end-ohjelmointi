@@ -8,7 +8,7 @@
 		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>hh.backend</groupId>
+	<groupId>tehtavat</groupId>
 	<artifactId>vk2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>vk2</name>

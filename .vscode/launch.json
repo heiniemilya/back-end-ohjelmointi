@@ -9,6 +9,16 @@
             "projectName": "demo",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-Vk2Application<vk2>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "tehtavat.vk2.Vk2Application",
+            "projectName": "vk2",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
