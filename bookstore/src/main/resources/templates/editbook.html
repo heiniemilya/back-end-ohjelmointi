@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Edit a book</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <h1>Edit a book</h1>
+
+    <table>
+        
+        <form th:object="${book}" th:action="@{/edit/{id}(id=${book.id})}" action="#" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <tr>
+                <td>
+                    <label for="title">Title: </label>
+                </td>
+                <td>
+                    <input type="text" id="title" th:field="*{title}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="author">Author: </label>
+                </td>
+                <td>
+                    <input type="text" id="author" th:field="*{author}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="publicationYear">Publ. year: </label>
+                </td>
+                <td>
+                    <input type="number" id="publicationYear" th:field="*{publicationYear}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="isbn">ISBN: </label>
+                </td>
+                <td>
+                    <input type="text" id="isbn" th:field="*{isbn}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="price">Price: </label>
+                </td>
+                <td>
+                    <input type="number" id="price" th:field="*{price}" step="0.01" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Save"></input>
+                </td>
+            </tr>
+        </form>
+    </table>
+  </body>
+</html>
