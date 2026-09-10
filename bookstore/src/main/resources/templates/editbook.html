@@ -3,60 +3,37 @@
   <head>
     <title>Edit a book</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
   </head>
   <body>
-    <h1>Edit a book</h1>
-
-    <table>
-        
+    <div class="container mx-auto my-5" style="width: 500px;">
+        <h1 class="mb-5 text-center display-4">Edit a book</h1>
         <form th:object="${book}" th:action="@{/edit/{id}(id=${book.id})}" action="#" method="post">
             <input type="hidden" th:field="*{id}" />
-            <tr>
-                <td>
-                    <label for="title">Title: </label>
-                </td>
-                <td>
-                    <input type="text" id="title" th:field="*{title}" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="author">Author: </label>
-                </td>
-                <td>
-                    <input type="text" id="author" th:field="*{author}" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="publicationYear">Publ. year: </label>
-                </td>
-                <td>
-                    <input type="number" id="publicationYear" th:field="*{publicationYear}" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="isbn">ISBN: </label>
-                </td>
-                <td>
-                    <input type="text" id="isbn" th:field="*{isbn}" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="price">Price: </label>
-                </td>
-                <td>
-                    <input type="number" id="price" th:field="*{price}" step="0.01" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="submit" value="Save"></input>
-                </td>
-            </tr>
+            <div class="mb-3">
+                <label class="form-label" for="title">Title: </label>
+                <input class="form-control" type="text" id="title" th:field="*{title}" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="author">Author: </label>
+                <input class="form-control" type="text" id="author" th:field="*{author}" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="publicationYear">Publ. year: </label>
+                <input class="form-control" type="number" id="publicationYear" th:field="*{publicationYear}" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="isbn">ISBN: </label>
+                <input class="form-control" type="text" id="isbn" th:field="*{isbn}" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="price">Price: </label>
+                <input class="form-control" type="number" id="price" th:field="*{price}" step="0.01" />
+            </div>
+            <div class="mt-4 col-12 d-flex justify-content-end">
+                <input type="submit" value="Save" class="btn btn-success"></input>
+            </div>
         </form>
-    </table>
+    </div>
   </body>
 </html>
