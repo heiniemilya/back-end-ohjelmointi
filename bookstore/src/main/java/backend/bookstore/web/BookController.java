@@ -12,16 +12,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class BookController {
+
+    public BookController(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
+    private final BookRepository bookRepository;
+
     @GetMapping("/index")
     public String showIndex() {
         return "index";
     }   
-    
-
-public BookController(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
-    private final BookRepository bookRepository;
 
     @GetMapping("/booklist")
     public String showBookList(Model model) {
@@ -44,7 +45,7 @@ public BookController(BookRepository bookRepository) {
     @GetMapping("/delete/{id}")
     public String deleteBook(@PathVariable Long id) {
         bookRepository.deleteById(id);
-        return "redirect:../booklist";
+        return "redirect:/booklist";
     }
 
     @GetMapping("/edit/{id}")

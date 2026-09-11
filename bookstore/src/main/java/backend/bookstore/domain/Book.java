@@ -3,6 +3,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Book {
@@ -12,8 +13,11 @@ public class Book {
     
     private String title;
     private String author;
+    @Size (min = 4, max = 4, message = "Publication year must be 4 digits")
     private int publicationYear;
+    @Size (min = 10, max = 13, message = "ISBN must be between 10 and 13 characters")
     private String isbn;
+    @Size (min = 0, message = "Price must be a positive number")
     private double price;
 
     public Book() {}
