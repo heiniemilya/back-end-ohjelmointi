@@ -3,6 +3,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -13,16 +15,17 @@ public class Book {
     
     private String title;
     private String author;
-    @Size (min = 4, max = 4, message = "Publication year must be 4 digits")
-    private int publicationYear;
+    @Min(value = 1000, message = "Publication year must be 4 digits")
+    @Max(value = 9999, message = "Publication year must be 4 digits")
+    private Integer publicationYear;
     @Size (min = 10, max = 13, message = "ISBN must be between 10 and 13 characters")
     private String isbn;
-    @Size (min = 0, message = "Price must be a positive number")
-    private double price;
+    @Min(value = 0, message = "Price must be a positive number")
+    private Double price;
 
     public Book() {}
 
-    public Book(String title, String author, int publicationYear, String isbn, double price) {
+    public Book(String title, String author, Integer publicationYear, String isbn, Double price) {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
@@ -39,14 +42,14 @@ public class Book {
     public String getAuthor() { return author; }
     public void setAuthor(String author) { this.author = author; }
 
-    public int getPublicationYear() { return publicationYear; }
-    public void setPublicationYear(int publicationYear) { this.publicationYear = publicationYear; }
+    public Integer getPublicationYear() { return publicationYear; }
+    public void setPublicationYear(Integer publicationYear) { this.publicationYear = publicationYear; }
 
     public String getIsbn() { return isbn; }
     public void setIsbn(String isbn) { this.isbn = isbn; }
 
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+    public Double getPrice() { return price; }
+    public void setPrice(Double price) { this.price = price; }
 
     @Override
     public String toString() {

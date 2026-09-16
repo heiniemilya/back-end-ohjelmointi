@@ -12,7 +12,7 @@
     </nav>
     <div class="container mx-auto my-5" style="width: 500px;">
         <h1 class="mb-5 text-center display-4">Add a book</h1>
-        <form class="" th:object="${book}" th:action="@{save}" action="#" method="post">
+        <form class="" th:object="${book}" th:action="@{saveandvalidate}" action="#" method="post">
             <div class="mb-3">
                 <label class="form-label" for="title">Title: </label>
                 <input class="form-control" type="text" id="title" th:field="*{title}" />
@@ -24,14 +24,17 @@
             <div class="mb-3">
                 <label class="form-label" for="publicationYear">Publ. year: </label>
                 <input class="form-control" type="number" id="publicationYear" th:field="*{publicationYear}" />
+                <span th:if="${#fields.hasErrors('publicationYear')}" th:errors="*{publicationYear}">Error</span>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="isbn">ISBN: </label>
                 <input class="form-control" type="text" id="isbn" th:field="*{isbn}" />
+                <span th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}">Error</span>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="price">Price: </label>
                 <input class="form-control" type="number" id="price" th:field="*{price}" step="0.01" />
+                <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Error</span>
             </div>
             <div class="mt-4 col-12 d-flex justify-content-end">
                 <input type="submit" value="Save" class="btn btn-success px-4"></input>
