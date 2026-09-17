@@ -18,19 +18,21 @@
 
         <table class="table table-striped align-middle table-borderless">
             <tr class="table-success">
+                <th>ISBN</th>
                 <th>Title</th>
                 <th>Author</th>
-                <th>Publication Year</th>
-                <th>ISBN</th>
+                <th>Publ. Year</th>
+                <th>Category</th>
                 <th>Price</th>
                 <th></th>
                 <th></th>
             </tr>
                 <tr th:each = "book : ${books}">
+                    <td th:text="${book.isbn}"></td>
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.author}"></td>
                     <td th:text="${book.publicationYear}"></td>
-                    <td th:text="${book.isbn}"></td>
+                    <td th:text="${book.category.name}"></td> 
                     <td th:text="${book.price}"></td>
                     <td  class=""><a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-secondary btn-sm">Edit</a></td>
                     <td  class=""><a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">Delete</a></td>

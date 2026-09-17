@@ -36,6 +36,17 @@
                 <input class="form-control" type="number" id="price" th:field="*{price}" step="0.01" />
                 <span th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Error</span>
             </div>
+            <div>
+                <label for="categorylist">Category</label>
+                <select id="categorylist" th:field="*{category}" class="form-select">
+                    <option th:value="null"></option>
+                    <option th:each="category: ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}">
+                    </option>
+                </select>
+                <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Error</span>
+            </div>
             <div class="mt-4 col-12 d-flex justify-content-end">
                 <input type="submit" value="Save" class="btn btn-success px-4"></input>
             </div>
