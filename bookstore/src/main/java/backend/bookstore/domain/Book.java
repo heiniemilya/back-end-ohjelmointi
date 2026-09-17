@@ -25,6 +25,7 @@ public class Book {
     private Integer publicationYear;
     @Size (min = 10, max = 13, message = "ISBN must be between 10 and 13 characters")
     private String isbn;
+    @NotNull(message = "Price is required")
     @Min(value = 0, message = "Price must be a positive number")
     private Double price; 
     
