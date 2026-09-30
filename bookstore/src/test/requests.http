@@ -1,0 +1,40 @@
+
+GET http://localhost:8080/books
+
+###
+GET http://localhost:8080/categories
+
+###
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{
+    "title": "Uusi kirja",
+    "author": "Matti Meikäläinen",
+    "publicationYear": 2024,
+    "isbn": "123998454666",
+    "price": 19.99,
+    "category": {
+        "id": 2
+    }
+}
+
+###
+PUT http://localhost:8080/books/2
+Content-Type: application/json
+
+{
+    "title": "Muokattu kirja",
+    "author": "Taina Teikäläinen",
+    "publicationYear": 2026,
+    "isbn": "1443998446345",
+    "price": 10.99,
+    "category": {
+        "id": 3
+    }
+}
+
+###
+DELETE http://localhost:8080/books/5
+Content-Type: application/json
+

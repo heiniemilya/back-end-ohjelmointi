@@ -16,15 +16,20 @@ public class Book {
     @Id // Creates id column to the table
     @GeneratedValue(strategy = GenerationType.AUTO) // Automatically  generates a unique primary key for every new entity object
     private Long id;
+    
     @NotBlank(message = "Title is required")
     private String title;
+
     @NotBlank(message = "Author is required")
     private String author;
+
     @Min(value = 1000, message = "Publication year must be 4 digits")
     @Max(value = 9999, message = "Publication year must be 4 digits")
     private Integer publicationYear;
+
     @Size (min = 10, max = 13, message = "ISBN must be between 10 and 13 characters")
     private String isbn;
+
     @NotNull(message = "Price is required")
     @Min(value = 0, message = "Price must be a positive number")
     private Double price; 
