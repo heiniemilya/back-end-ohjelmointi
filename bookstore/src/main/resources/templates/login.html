@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+  <head>
+    <title>Login to Bookstore</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+  </head>
+  <body>
+    
+    <div class="container my-5">
+        <div class="container mt-5 text-center">
+            <h1 class="display-2 mb-5">BOOKSTORE</h1>
+            <h4 class="pb-2">Login to see our books</h4>
+        </div>
+        
+        <div class="container mx-auto my-4" style="width: 400px; "> <!-- border: 1px solid  rgb(201, 201, 201); border-radius: 20px;  -->
+            <form th:action="@{/login}" method="post">
+                <div class="row mb-3">
+                    <label for="loginName" class="col-sm-4 col-form-label"> User Name : </label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="loginName" name="username"/> 
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="loginPassword" class="col-sm-4 col-form-label"> Password:</label>
+                    <div class="col-sm-8">
+                        <input type="password" class="form-control" id="loginPassword" name="password"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-8 d-flex justify-content-start">
+                        <button type="submit" class="btn btn-success">Sign In</button>
+                    </div>
+                </div>
+            </form>
+        
+            <div th:if="${param.error}">
+                Invalid username or password.
+            </div>
+        </div>
+    </div>
+    
+  </body>
+</html>

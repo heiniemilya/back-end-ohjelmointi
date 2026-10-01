@@ -2,6 +2,7 @@ package backend.bookstore.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -32,6 +35,12 @@ public class BookController {
     private final BookRepository bookRepository; 
     private final CategoryRepository categoryRepository;
 
+    // Login
+    @GetMapping("/login")
+    public String showLogin() {
+        return "login";
+    }
+    
     // Index page
     @GetMapping("/index")
     public String showIndex() {
@@ -49,6 +58,7 @@ public class BookController {
 
     // Add new book
     @GetMapping("/addbook")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addBook(Model model) {
         log.info("addBook() called");
         model.addAttribute("book", new Book());
@@ -58,6 +68,7 @@ public class BookController {
 
     // Delete book by ID
     @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteBook(@PathVariable Long id) {
         log.info("deleteBook() called with ID: {}", id);
         bookRepository.deleteById(id);
@@ -66,6 +77,7 @@ public class BookController {
 
     // Edit book by ID
     @GetMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String editBook(@PathVariable Long id, Model model) {
         log.info("editBook() called with ID: {}", id);
         Book book = bookRepository.findById(id).get();
