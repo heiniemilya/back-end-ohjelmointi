@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -58,7 +57,7 @@ public class BookController {
 
     // Add new book
     @GetMapping("/addbook")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String addBook(Model model) {
         log.info("addBook() called");
         model.addAttribute("book", new Book());
@@ -68,7 +67,7 @@ public class BookController {
 
     // Delete book by ID
     @GetMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String deleteBook(@PathVariable Long id) {
         log.info("deleteBook() called with ID: {}", id);
         bookRepository.deleteById(id);
@@ -77,7 +76,7 @@ public class BookController {
 
     // Edit book by ID
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String editBook(@PathVariable Long id, Model model) {
         log.info("editBook() called with ID: {}", id);
         Book book = bookRepository.findById(id).get();

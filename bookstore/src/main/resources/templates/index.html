@@ -16,11 +16,11 @@
     </nav>
 
     <div class="container my-5 text-center ">
-      <h1 sec:authorize="hasRole ('ADMIN')" class="display-4 mb-4">Hello, <span sec:authentication="name" class="text-capitalize"></span>!</h1>
-      <h1 sec:authorize="hasRole ('USER')"class="display-4 mb-4">Welcome to the Bookstore, </br> <span sec:authentication="name" class="text-capitalize"></span>!</h1>
+      <h1 sec:authorize="hasAuthority ('ADMIN')" class="display-4 mb-4">Hello, <span sec:authentication="name" class="text-capitalize"></span>!</h1>
+      <h1 sec:authorize="hasAuthority ('USER')"class="display-4 mb-4">Welcome to the Bookstore, </br> <span sec:authentication="name" class="text-capitalize"></span>!</h1>
       <div class="d-grid gap-3 col-6 col-md-4 mx-auto pt-3">
         <a href="/booklist" class="btn btn-success text-nowrap px-4 mx-3">See all books</a>
-        <a sec:authorize="hasRole ('ADMIN')" href="/addbook" class="btn btn-success text-nowrap px-4 mx-3">Add a new book</a>
+        <a sec:authorize="hasAuthority ('ADMIN')" href="/addbook" class="btn btn-success text-nowrap px-4 mx-3">Add a new book</a>
       </div>
     </div>
     

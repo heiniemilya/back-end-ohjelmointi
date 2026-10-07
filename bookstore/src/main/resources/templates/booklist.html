@@ -17,7 +17,7 @@
     <div class="container my-5">
         <div class="mb-5 d-flex justify-content-between align-items-end">
             <h1 class="display-4 mb-0">Books</h1>
-            <a sec:authorize="hasRole ('ADMIN')" href="/addbook" class="btn btn-success text-nowrap px-4 mx-3">Add a book</a>
+            <a sec:authorize="hasAuthority ('ADMIN')" href="/addbook" class="btn btn-success text-nowrap px-4 mx-3">Add a book</a>
         </div>
 
         <table class="table table-striped align-middle table-borderless">
@@ -28,8 +28,8 @@
                 <th>Publ. Year</th>
                 <th>Category</th>
                 <th>Price</th>
-                <th sec:authorize="hasRole ('ADMIN')"></th>
-                <th sec:authorize="hasRole ('ADMIN')"></th>
+                <th sec:authorize="hasAuthority ('ADMIN')"></th>
+                <th sec:authorize="hasAuthority ('ADMIN')"></th>
             </tr>
                 <tr th:each = "book : ${books}">
                     <td th:text="${book.isbn}"></td>
@@ -38,8 +38,8 @@
                     <td th:text="${book.publicationYear}"></td>
                     <td th:text="${book.category.name}"></td> 
                     <td th:text="${book.price}"></td>
-                    <td sec:authorize="hasRole ('ADMIN')"><a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-secondary btn-sm">Edit</a></td>
-                    <td sec:authorize="hasRole ('ADMIN')"><a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">Delete</a></td>
+                    <td sec:authorize="hasAuthority ('ADMIN')"><a th:href="@{/edit/{id}(id=${book.id})}" class="btn btn-secondary btn-sm">Edit</a></td>
+                    <td sec:authorize="hasAuthority ('ADMIN')"><a th:href="@{/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">Delete</a></td>
                 </tr>
         </table>
      </div>
