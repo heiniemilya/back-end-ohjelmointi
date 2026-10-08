@@ -1,11 +1,17 @@
+@username = admin
+@password = admin
 
 GET http://localhost:8080/books
+Authorization: Basic {{username}} {{password}}
 
 ###
 GET http://localhost:8080/categories
+Authorization: Basic {{username}} {{password}}
+
 
 ###
 POST http://localhost:8080/books
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
@@ -21,6 +27,7 @@ Content-Type: application/json
 
 ###
 PUT http://localhost:8080/books/2
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 
 {
@@ -36,5 +43,6 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/books/5
+Authorization: Basic {{username}} {{password}}
 Content-Type: application/json
 

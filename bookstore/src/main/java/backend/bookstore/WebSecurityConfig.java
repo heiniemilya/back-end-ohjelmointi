@@ -5,6 +5,7 @@ package backend.bookstore;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,6 +29,9 @@ public class WebSecurityConfig {
 				.requestMatchers("/css/***").permitAll()    // Path/s that doesn't require any authentication.
 				.anyRequest().authenticated()                 // All other paths must be authenticated.
 			)
+            .csrf(csrf -> csrf.disable()) // NOT FOR PRODUCTION! Disable CSRF protection for testing purposes
+            .httpBasic(Customizer.withDefaults()) // Enable HTTP Basic authentication
+            
 		.formLogin( formlogin -> formlogin
 			.loginPage("/login")                          // Custom login page.
 			.defaultSuccessUrl("/index", true)      // <-- Tells where to go after
