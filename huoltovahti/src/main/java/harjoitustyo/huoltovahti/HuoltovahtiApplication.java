@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 
 import harjoitustyo.huoltovahti.domain.Category;
 import harjoitustyo.huoltovahti.domain.CategoryRepository;
+import harjoitustyo.huoltovahti.domain.MaintenanceTarget;
+import harjoitustyo.huoltovahti.domain.MaintenanceTargetRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTask;
 import harjoitustyo.huoltovahti.domain.MaintenanceTaskRepository;
 
@@ -19,7 +21,7 @@ public class HuoltovahtiApplication {
 
 	// Add demo data to H2 database
 	@Bean
-	public CommandLineRunner demo(CategoryRepository categoryRepository, MaintenanceTaskRepository maintenanceTaskRepository ) {
+	public CommandLineRunner demo(CategoryRepository categoryRepository, MaintenanceTaskRepository maintenanceTaskRepository, MaintenanceTargetRepository maintenanceTargetRepository) {
 		return (args) -> {
 
 			// Add categories
@@ -44,17 +46,42 @@ public class HuoltovahtiApplication {
 			Category category7 = new Category("Piha");
 			categoryRepository.save(category7);
 
+			// Add Maintenance Targets
+			MaintenanceTarget target1 = new MaintenanceTarget("Talo A", false);
+			maintenanceTargetRepository.save(target1);
+
+			MaintenanceTarget target2 = new MaintenanceTarget("Talo B", false);
+			maintenanceTargetRepository.save(target2);
+
+			MaintenanceTarget target3 = new MaintenanceTarget("Talo C", false);
+			maintenanceTargetRepository.save(target3);
+
+			MaintenanceTarget target4 = new MaintenanceTarget("Pysäköintialue", true);
+			maintenanceTargetRepository.save(target4);
+
+			MaintenanceTarget target5 = new MaintenanceTarget("Jätekatos", true);
+			maintenanceTargetRepository.save(target5);
+
 			// Add Maintenance Tasks
 			MaintenanceTask task1 = new MaintenanceTask("Ulkoseinien maalaus", "Maalattu kaikki A-talon ulkoseinät", 2024, 
 			"kesä-heinäkuu", 0.0, 0.0, "valmis", 
 			"Osakas", false, category2);
+			task1.getTargets().add(target1);
 			maintenanceTaskRepository.save(task1);
 
 			MaintenanceTask task2 = new MaintenanceTask("Sähkösaneeraus", "Uusittu B-talon sähköjärjestelmä", 2025, 
 			"tammikuu", 0.0, 0.0, "valmis", 
 			"Osakas", false, category4);
+			task2.getTargets().add(target2);
 			maintenanceTaskRepository.save(task2);
 
+			MaintenanceTask task3 = new MaintenanceTask("Kattoremontti", "Uusittu kaikkien talojen katot", 2026, 
+			"joulu-tammikuu", 0.0, 0.0, "valmis", 
+			"Taloyhtiö", false, category5);
+			task3.getTargets().add(target1);
+			task3.getTargets().add(target2);
+			task3.getTargets().add(target3);
+			maintenanceTaskRepository.save(task3);
 		};
 	}
 }
