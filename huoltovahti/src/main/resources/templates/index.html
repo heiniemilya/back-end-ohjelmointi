@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+  <head>
+    <title>Huoltovahti</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+  </head>
+  <body>
+    <div class="container my-5">
+        <div class="mb-5 d-flex justify-content-between align-items-end">
+            <h1 class="display-4 mb-0">Huoltovahti</h1>
+            <a href="/addMaintenanceTask" class="btn btn-success text-nowrap px-4 mx-3">Lisää uusi huoltotyö</a>
+        </div>
+
+        <table class="table table-striped align-middle table-borderless">
+            <tr class="table-success">
+                <th>Otsikko</th>
+                <th>Kuvaus</th>
+                <th>Vuosi</th>
+                <th>Ajankohta</th>
+                <th>Vastuu</th>
+                <th></th>
+                <th></th>
+            </tr>
+                <tr th:each = "maintenanceTask : ${maintenanceTasks}">
+                    <td th:text="${maintenanceTask.title}"></td>
+                    <td th:text="${maintenanceTask.description}"></td>
+                    <td th:text="${maintenanceTask.taskYear}"></td>
+                    <td th:text="${maintenanceTask.timeframe}"></td>
+                    <td th:text="${maintenanceTask.responsibility}"></td>
+                    <td><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="btn btn-secondary btn-sm">Edit</a></td>
+                    <td><a th:href="@{/delete/{id}(id=${maintenanceTask.id})}" class="btn btn-danger btn-sm">Delete</a></td>
+                </tr>
+        </table>
+     </div>
+    
+  </body>
+</html>
