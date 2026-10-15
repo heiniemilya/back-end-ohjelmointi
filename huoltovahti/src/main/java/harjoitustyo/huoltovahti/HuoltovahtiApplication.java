@@ -65,19 +65,19 @@ public class HuoltovahtiApplication {
 			// Add Maintenance Tasks
 			MaintenanceTask task1 = new MaintenanceTask("Ulkoseinien maalaus", "Maalattu kaikki A-talon ulkoseinät", 2024, 
 			"kesä-heinäkuu", 0.0, 0.0, "valmis", 
-			"Osakas", false, category2);
+			"Osakas", false, true, category2);
 			task1.getTargets().add(target1);
 			maintenanceTaskRepository.save(task1);
 
 			MaintenanceTask task2 = new MaintenanceTask("Sähkösaneeraus", "Uusittu B-talon sähköjärjestelmä", 2025, 
 			"tammikuu", 0.0, 0.0, "valmis", 
-			"Osakas", false, category4);
+			"Osakas", false, false, category4);
 			task2.getTargets().add(target2);
 			maintenanceTaskRepository.save(task2);
 
 			MaintenanceTask task3 = new MaintenanceTask("Kattoremontti", "Uusittu kaikkien talojen katot", 2026, 
 			"joulu-tammikuu", 0.0, 0.0, "valmis", 
-			"Taloyhtiö", false, category5);
+			"Taloyhtiö", false, false, category5);
 			task3.getTargets().add(target1);
 			task3.getTargets().add(target2);
 			task3.getTargets().add(target3);

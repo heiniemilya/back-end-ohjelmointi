@@ -44,13 +44,16 @@ public class MaintenanceTask {
     
     private boolean isPaidByCompany;
 
-    // Many-to-One
+    private boolean isSelfPerformed; 
+
+
+    // Many-to-One: MaintenanceTask -> Category
     @NotNull(message = "Select category for maintenance task")
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category; 
 
-    // Many-to-Many
+    // Many-to-Many: MaintanenceTask -> MaintenanceTarget
     @NotEmpty(message = "Select at least one target for maintenance task")
     @ManyToMany
     @JoinTable(
@@ -66,7 +69,7 @@ public class MaintenanceTask {
 
     // Constructor
     public MaintenanceTask(String title, String description, Integer year, String timeframe, Double estimatedCost, 
-            Double actualCost, String status, String responsibility, boolean isPaidByCompany, Category category) {
+            Double actualCost, String status, String responsibility, boolean isPaidByCompany, boolean isSelfPerformed, Category category) {
         this.title = title;
         this.description = description;
         this.taskYear = year;
@@ -76,6 +79,7 @@ public class MaintenanceTask {
         this.status = status;
         this.responsibility = responsibility;
         this.isPaidByCompany = isPaidByCompany;
+        this.isSelfPerformed = isSelfPerformed;
         this.category = category;
     }
 
@@ -160,6 +164,14 @@ public class MaintenanceTask {
         this.isPaidByCompany = isPaidByCompany;
     }
 
+    public boolean isSelfPerformed() {
+        return isSelfPerformed;
+    }
+
+    public void setSelfPerformed(boolean isSelfPerformed) {
+        this.isSelfPerformed = isSelfPerformed;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -176,11 +188,13 @@ public class MaintenanceTask {
         this.targets = targets;
     }
 
+
     @Override
     public String toString() {
         return "MaintenanceTask [id=" + id + ", title=" + title + ", description=" + description + ", taskYear=" + taskYear
                 + ", timeframe=" + timeframe + ", estimatedCost=" + estimatedCost + ", actualCost=" + actualCost
-                + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany + ", category=" + category + ", targets=" + targets + "]";
+                + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany 
+                + ", isSelfPerformed=" + isSelfPerformed + ", category=" + category + ", targets=" + targets + "]";
     }
 
 }
