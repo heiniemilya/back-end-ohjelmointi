@@ -21,6 +21,7 @@
                 <th>Vastuu</th>
                 <th>Kategoria</th>
                 <th>Kohde</th>
+                <th>Urakoitsija</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -34,6 +35,11 @@
                     <td>
                         <span th:each="target, iterStat : ${maintenanceTask.targets}">
                             <span th:text="${target.name}"></span><span th:if="${!iterStat.last}">, </span>
+                        </span>
+                    </td>
+                    <td>
+                        <span th:each="contractor, iterStat : ${maintenanceTask.contractors}">
+                            <span th:text="${contractor.name}"></span><span th:if="${!iterStat.last}">, </span>
                         </span>
                     </td>
                     <td><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="btn btn-secondary btn-sm">Edit</a></td>
