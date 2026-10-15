@@ -3,6 +3,9 @@ package harjoitustyo.huoltovahti.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -46,12 +50,16 @@ public class MaintenanceTask {
 
     private boolean isSelfPerformed; 
 
-
     // Many-to-One: MaintenanceTask -> Category
     @NotNull(message = "Select category for maintenance task")
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category; 
+
+    // One-to-Many: MaintenanceTask -> Contractor
+    @JsonIgnore 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy ="maintenanceTask")
+    private List<Contractor> contractors;
 
     // Many-to-Many: MaintanenceTask -> MaintenanceTarget
     @NotEmpty(message = "Select at least one target for maintenance task")
@@ -188,13 +196,20 @@ public class MaintenanceTask {
         this.targets = targets;
     }
 
+    public List<Contractor> getContractors() {
+        return contractors;
+    }
+
+    public void setContractors(List<Contractor> contractors) {
+        this.contractors = contractors;
+    }
 
     @Override
     public String toString() {
         return "MaintenanceTask [id=" + id + ", title=" + title + ", description=" + description + ", taskYear=" + taskYear
                 + ", timeframe=" + timeframe + ", estimatedCost=" + estimatedCost + ", actualCost=" + actualCost
                 + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany 
-                + ", isSelfPerformed=" + isSelfPerformed + ", category=" + category + ", targets=" + targets + "]";
+                + ", isSelfPerformed=" + isSelfPerformed + ", category=" + category + ", targets=" + targets + ", contractors=" + contractors + "]";
     }
 
 }
