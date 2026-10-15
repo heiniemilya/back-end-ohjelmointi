@@ -1,0 +1,77 @@
+package harjoitustyo.huoltovahti.domain;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotBlank;
+
+@Entity  // Represents a table in relational database 
+public class MaintenanceTarget {
+    @Id
+    @GeneratedValue (strategy = GenerationType.AUTO) // Automatically generates a unique primary key for every new entity object
+    private Long id;
+
+    @NotBlank(message = "Target is required")
+    private String name; // esim. "Talo A", "Jätekatos", "Pysäköintialue"
+
+    private boolean isCommonArea; // Kuuluuko kohde yhteisiin vai yksityisiin tiloihin
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "targets")
+    private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
+
+    // Default constructor
+    public MaintenanceTarget() {
+    }
+
+    // Constructor
+    public MaintenanceTarget(String name, boolean isCommonArea) {
+        this.name = name;
+        this.isCommonArea = isCommonArea;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public boolean isCommonArea() {
+        return isCommonArea;
+    }
+
+    public void setCommonArea(boolean isCommonArea) {
+        this.isCommonArea = isCommonArea;
+    }
+
+    public List<MaintenanceTask> getMaintenanceTasks() {
+        return maintenanceTasks;
+    }
+
+    public void setMaintenanceTasks(List<MaintenanceTask> maintenanceTasks) {
+        this.maintenanceTasks = maintenanceTasks;
+    }
+
+    @Override
+    public String toString() {
+        return "MaintenanceTarget [id=" + id + ", name=" + name + ", isCommonArea=" + isCommonArea + "]";
+    }
+}
