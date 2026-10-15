@@ -19,6 +19,7 @@ public class Category {
 
     private String name;
 
+    // One-to-Many: Category -> MaintenanceTask
     @JsonIgnore 
     @OneToMany(cascade = CascadeType.ALL, mappedBy ="category")
     private List<MaintenanceTask> maintanenceTasks;
@@ -60,7 +61,7 @@ public class Category {
     // toString
     @Override
     public String toString() {
-        return "Category [id=" + id + ", name=" + name + ", maintanenceTasks=" + maintanenceTasks + "]";
+        return "Category [id=" + id + ", name=" + name + "]";
     }
     
 }
