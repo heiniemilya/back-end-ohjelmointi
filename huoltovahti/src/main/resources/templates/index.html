@@ -19,6 +19,7 @@
                 <th>Vuosi</th>
                 <th>Ajankohta</th>
                 <th>Vastuu</th>
+                <th>Kategoria</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -28,6 +29,7 @@
                     <td th:text="${maintenanceTask.taskYear}"></td>
                     <td th:text="${maintenanceTask.timeframe}"></td>
                     <td th:text="${maintenanceTask.responsibility}"></td>
+                    <td th:text="${maintenanceTask.category.name}"></td>
                     <td><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="btn btn-secondary btn-sm">Edit</a></td>
                     <td><a th:href="@{/delete/{id}(id=${maintenanceTask.id})}" class="btn btn-danger btn-sm">Delete</a></td>
                 </tr>

@@ -4,9 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity  // Represents a table in relational database 
 public class MaintenanceTask {
@@ -35,13 +38,19 @@ public class MaintenanceTask {
     
     private boolean isPaidByCompany;
 
+    // Many-to-One
+    @NotNull(message = "Select category for maintenance task")
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category; 
+
     // Default constructor
     public MaintenanceTask() {
     }
 
     // Constructor
-    public MaintenanceTask(String title, String description, Integer year,
-            String timeframe, Double estimatedCost, Double actualCost, String status, String responsibility, boolean isPaidByCompany) {
+    public MaintenanceTask(String title, String description, Integer year, String timeframe, Double estimatedCost, 
+            Double actualCost, String status, String responsibility, boolean isPaidByCompany, Category category) {
         this.title = title;
         this.description = description;
         this.taskYear = year;
@@ -51,6 +60,7 @@ public class MaintenanceTask {
         this.status = status;
         this.responsibility = responsibility;
         this.isPaidByCompany = isPaidByCompany;
+        this.category = category;
     }
 
     // Getters and Setters
@@ -134,11 +144,19 @@ public class MaintenanceTask {
         this.isPaidByCompany = isPaidByCompany;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "MaintenanceTask [id=" + id + ", title=" + title + ", description=" + description + ", taskYear=" + taskYear
                 + ", timeframe=" + timeframe + ", estimatedCost=" + estimatedCost + ", actualCost=" + actualCost
-                + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany + "]";
+                + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany + ", category=" + category + "]";
     }
 
 }
