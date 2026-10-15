@@ -1,14 +1,20 @@
 package harjoitustyo.huoltovahti.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @Entity  // Represents a table in relational database 
@@ -43,6 +49,16 @@ public class MaintenanceTask {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category; 
+
+    // Many-to-Many
+    @NotEmpty(message = "Select at least one target for maintenance task")
+    @ManyToMany
+    @JoinTable(
+        name = "task_target",
+        joinColumns = @JoinColumn(name = "task_id"),
+        inverseJoinColumns = @JoinColumn(name = "target_id")
+    )
+    private List<MaintenanceTarget> targets = new ArrayList<>(); 
 
     // Default constructor
     public MaintenanceTask() {
@@ -152,11 +168,19 @@ public class MaintenanceTask {
         this.category = category;
     }
 
+    public List<MaintenanceTarget> getTargets() {
+        return targets;
+    }
+
+    public void setTargets(List<MaintenanceTarget> targets) {
+        this.targets = targets;
+    }
+
     @Override
     public String toString() {
         return "MaintenanceTask [id=" + id + ", title=" + title + ", description=" + description + ", taskYear=" + taskYear
                 + ", timeframe=" + timeframe + ", estimatedCost=" + estimatedCost + ", actualCost=" + actualCost
-                + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany + ", category=" + category + "]";
+                + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany + ", category=" + category + ", targets=" + targets + "]";
     }
 
 }
