@@ -66,22 +66,22 @@
                         <th class="ps-3">Ajankohta</th>
                         <th>Kohde</th>
                         <th>Huoltotyö</th>
-                        <th>Työn tekijä</th>
+                        <th>Työn suorittaja</th>
                         <th>Vastuu</th>
                         <th>Yhtiön <br>rahoitus</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each = "maintenanceTask : ${maintenanceTasks}" class="border-bottom align-middle table-light">
+                    <tr th:each = "task : ${tasks}" class="border-bottom align-middle table-light">
                         <!-- Year & Timeframe -->
                         <td class="ps-3">
-                            <div th:text="${maintenanceTask.taskYear}" class="fw-bold"></div>
-                            <div th:text="${maintenanceTask.timeframe}"></div>
+                            <div th:text="${task.taskYear}" class="fw-bold"></div>
+                            <div th:text="${task.timeframe}"></div>
                         </td>
                         <!-- Target -->
                         <td>
-                            <span th:each="target : ${maintenanceTask.targets}">
+                            <span th:each="target : ${task.targets}">
                                 <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
                                 class="badge bg-primary text-light text-decoration-none" 
                                 th:text="${target.name}"></a>
@@ -89,26 +89,26 @@
                         </td>
                         <!-- Title & Description -->
                         <td>
-                            <div th:text="${maintenanceTask.title}" class="fw-bold"></div>
-                            <div th:text="${maintenanceTask.description}"></div>
+                            <div th:text="${task.title}" class="fw-bold"></div>
+                            <div th:text="${task.description}"></div>
                         </td>
                         <!-- Contractor -->
                         <td>
-                            <span th:each="contractor, iterStat : ${maintenanceTask.contractors}">
+                            <span th:each="contractor, iterStat : ${task.contractors}">
                                 <span th:text="${contractor.name}"></span><span th:if="${!iterStat.last}">, </span>
                             </span>
-                            <span th:if="${maintenanceTask.isSelfPerformed}">Osakas</span>  
+                            <span th:if="${task.isSelfPerformed}">Osakas</span>  
                         </td>
                         <!-- Responsibility -->
-                        <td th:text="${maintenanceTask.responsibility}"></td>
+                        <td th:text="${task.responsibility}"></td>
                         <!-- Paid by Company -->
                         <td class="ps-4">
-                            <i th:if="${maintenanceTask.isPaidByCompany}" class="bi bi-check-circle-fill text-success"></i>
-                            <i th:unless="${maintenanceTask.isPaidByCompany}" class="bi bi-dash text-muted fs-5"></i>
+                            <i th:if="${task.isPaidByCompany}" class="bi bi-check-circle-fill text-success"></i>
+                            <i th:unless="${task.isPaidByCompany}" class="bi bi-dash text-muted fs-5"></i>
                         </td>
                         <!-- Edit -->
                         <td>
-                            <i><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="bi bi-pencil-square text-primary fs-5"></a></i>
+                            <i><a th:href="@{/edit/{id}(id=${task.id})}" class="bi bi-pencil-square text-primary fs-5"></a></i>
                         </td>
                     </tr>
                 </tbody>

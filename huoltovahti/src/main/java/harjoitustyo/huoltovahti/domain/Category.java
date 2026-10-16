@@ -22,7 +22,7 @@ public class Category {
     // One-to-Many: Category -> MaintenanceTask
     @JsonIgnore 
     @OneToMany(cascade = CascadeType.ALL, mappedBy ="category")
-    private List<MaintenanceTask> maintanenceTasks;
+    private List<MaintenanceTask> tasks;
 
     // Default constructor
     public Category() {
@@ -50,12 +50,12 @@ public class Category {
         this.name = name;
     }
 
-    public List<MaintenanceTask> getMaintanenceTasks() {
-        return maintanenceTasks;
+    public List<MaintenanceTask> getTasks() {
+        return tasks;
     }
 
-    public void setMaintanenceTasks(List<MaintenanceTask> maintanenceTasks) {
-        this.maintanenceTasks = maintanenceTasks;
+    public void setTasks(List<MaintenanceTask> tasks) {
+        this.tasks = tasks;
     }
 
     // toString

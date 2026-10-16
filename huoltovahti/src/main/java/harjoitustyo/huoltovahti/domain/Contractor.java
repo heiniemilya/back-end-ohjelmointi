@@ -28,21 +28,21 @@ public class Contractor {
     // Many-to-One: Contractor -> MaintenanceTask
     @ManyToOne
     @JoinColumn(name = "maintenance_task_id")
-    private MaintenanceTask maintenanceTask; 
+    private MaintenanceTask task; 
 
     // Default constructor
     public Contractor() {
     }
 
     // Constructor
-    public Contractor(String name, String businessId, String role, String phone, String email, String website, MaintenanceTask maintenanceTask) {
+    public Contractor(String name, String businessId, String role, String phone, String email, String website, MaintenanceTask task) {
         this.name = name;
         this.businessId = businessId;
         this.role = role;
         this.phone = phone;
         this.email = email;
         this.website = website;
-        this.maintenanceTask = maintenanceTask;
+        this.task = task;
     }
 
      // Getters and Setters
@@ -102,12 +102,12 @@ public class Contractor {
         this.website = website;
     }
 
-    public MaintenanceTask getMaintenanceTask() {
-        return maintenanceTask;
+    public MaintenanceTask getTask() {
+        return task;
     }
 
-    public void setMaintenanceTask(MaintenanceTask maintenanceTask) {
-        this.maintenanceTask = maintenanceTask;
+    public void setTask(MaintenanceTask task) {
+        this.task = task;
     }
 
     // toString

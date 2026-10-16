@@ -25,7 +25,7 @@ public class MaintenanceTarget {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "targets")
-    private List<MaintenanceTask> maintenanceTasks = new ArrayList<>();
+    private List<MaintenanceTask> tasks = new ArrayList<>();
 
     // Default constructor
     public MaintenanceTarget() {
@@ -62,12 +62,12 @@ public class MaintenanceTarget {
         this.isCommonArea = isCommonArea;
     }
 
-    public List<MaintenanceTask> getMaintenanceTasks() {
-        return maintenanceTasks;
+    public List<MaintenanceTask> getTasks() {
+        return tasks;
     }
 
-    public void setMaintenanceTasks(List<MaintenanceTask> maintenanceTasks) {
-        this.maintenanceTasks = maintenanceTasks;
+    public void setTasks(List<MaintenanceTask> tasks) {
+        this.tasks = tasks;
     }
 
     @Override
