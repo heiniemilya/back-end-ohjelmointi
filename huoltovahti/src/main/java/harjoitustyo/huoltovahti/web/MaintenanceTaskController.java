@@ -6,13 +6,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import harjoitustyo.huoltovahti.domain.CategoryRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTargetRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTask;
 import harjoitustyo.huoltovahti.domain.MaintenanceTaskRepository;
+import jakarta.validation.Valid;
 
 @Controller 
 public class MaintenanceTaskController {
@@ -54,7 +58,7 @@ public class MaintenanceTaskController {
             log.info("showIndex() called with all categories and targets");
         }
 
-        model.addAttribute("maintenanceTasks", tasks);
+        model.addAttribute("tasks", tasks);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
 
@@ -68,10 +72,25 @@ public class MaintenanceTaskController {
     // Add new maintenance task
     @GetMapping("/addMaintenanceTask")
     public String addMaintenanceTask(Model model) {
-        log.info("addMaintenanceTask() called");
-        model.addAttribute("maintenanceTask", new MaintenanceTask());
+        model.addAttribute("task", new MaintenanceTask());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
         return "/addMaintenanceTask";
     }
+
+    // Save and validate new maintenance task
+    @PostMapping("/saveAndValidate")
+    public String saveAndValidate(@Valid @ModelAttribute("task") MaintenanceTask task, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.error("Validation error happened, task: " + task);
+            model.addAttribute("task", task);
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("targets", maintenanceTargetRepository.findAll());
+            return "/addMaintenanceTask";
+        }
+        log.info("Validation passed, saving task: " + task);
+        maintenanceTaskRepository.save(task);
+        return "redirect:/index";
+    }
+
 }
