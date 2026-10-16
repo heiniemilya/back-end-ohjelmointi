@@ -4,47 +4,65 @@
     <title>Huoltovahti</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   </head>
   <body>
     <div class="container my-5">
+
         <div class="mb-5 d-flex justify-content-between align-items-end">
             <h1 class="display-4 mb-0">Huoltovahti</h1>
             <a href="/addMaintenanceTask" class="btn btn-success text-nowrap px-4 mx-3">Lisää uusi huoltotyö</a>
         </div>
 
+        <!-------- MAINTENANCE TASK TABLE --------->
         <table class="table table-striped align-middle table-borderless">
             <tr class="table-success">
-                <th>Otsikko</th>
-                <th>Kuvaus</th>
-                <th>Vuosi</th>
                 <th>Ajankohta</th>
-                <th>Vastuu</th>
-                <th>Kategoria</th>
                 <th>Kohde</th>
-                <th>Urakoitsija</th>
-                <th></th>
+                <th>Huoltotyö</th>
+                <th>Työn tekijä</th>
+                <th>Vastuu</th>
+                <th>Yhtiön <br>rahoitus</th>
                 <th></th>
             </tr>
-                <tr th:each = "maintenanceTask : ${maintenanceTasks}">
-                    <td th:text="${maintenanceTask.title}"></td>
-                    <td th:text="${maintenanceTask.description}"></td>
-                    <td th:text="${maintenanceTask.taskYear}"></td>
-                    <td th:text="${maintenanceTask.timeframe}"></td>
-                    <td th:text="${maintenanceTask.responsibility}"></td>
-                    <td th:text="${maintenanceTask.category.name}"></td>
-                    <td>
-                        <span th:each="target, iterStat : ${maintenanceTask.targets}">
-                            <span th:text="${target.name}"></span><span th:if="${!iterStat.last}">, </span>
-                        </span>
-                    </td>
-                    <td>
-                        <span th:each="contractor, iterStat : ${maintenanceTask.contractors}">
-                            <span th:text="${contractor.name}"></span><span th:if="${!iterStat.last}">, </span>
-                        </span>
-                    </td>
-                    <td><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="btn btn-secondary btn-sm">Edit</a></td>
-                    <td><a th:href="@{/delete/{id}(id=${maintenanceTask.id})}" class="btn btn-danger btn-sm">Delete</a></td>
-                </tr>
+            <tr th:each = "maintenanceTask : ${maintenanceTasks}">
+                <!-- Year & Timeframe -->
+                <td>
+                    <div th:text="${maintenanceTask.taskYear}" class="fw-bold"></div>
+                    <div th:text="${maintenanceTask.timeframe}"></div>
+                </td>
+                <!-- Target -->
+                <td>
+                    <span th:each="target : ${maintenanceTask.targets}">
+                        <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
+                        class="badge bg-secondary text-light text-decoration-none" 
+                        th:text="${target.name}"></a>
+                    </span>
+                </td>
+                <!-- Title & Description -->
+                <td>
+                    <div th:text="${maintenanceTask.title}" class="fw-bold"></div>
+                    <div th:text="${maintenanceTask.description}"></div>
+                </td>
+                <!-- Contractor -->
+                <td>
+                    <span th:each="contractor, iterStat : ${maintenanceTask.contractors}">
+                        <span th:text="${contractor.name}"></span><span th:if="${!iterStat.last}">, </span>
+                    </span>
+                    <span th:if="${maintenanceTask.isSelfPerformed}">Osakas</span>  
+                </td>
+                <!-- Responsibility -->
+                <td th:text="${maintenanceTask.responsibility}"></td>
+                <!-- Paid by Company -->
+                <td>
+                    <i th:if="${maintenanceTask.isPaidByCompany}" class="bi bi-check-circle-fill text-success"></i>
+                    <i th:unless="${maintenanceTask.isPaidByCompany}" class="bi bi-dash text-muted"></i>
+                </td>
+                <!-- Edit -->
+                <td>
+                    <i><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="bi bi-pencil-square text-secondary"></a></i>
+                </td>
+            </tr>
         </table>
      </div>
     
