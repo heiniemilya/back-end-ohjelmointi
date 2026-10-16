@@ -16,7 +16,7 @@ import harjoitustyo.huoltovahti.domain.MaintenanceTaskRepository;
 
 @SpringBootApplication
 public class HuoltovahtiApplication {
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(HuoltovahtiApplication.class, args);
 	}
@@ -50,13 +50,13 @@ public class HuoltovahtiApplication {
 			categoryRepository.save(category7);
 
 			// Add Maintenance Targets
-			MaintenanceTarget target1 = new MaintenanceTarget("Talo A", false);
+			MaintenanceTarget target1 = new MaintenanceTarget("A", false);
 			maintenanceTargetRepository.save(target1);
 
-			MaintenanceTarget target2 = new MaintenanceTarget("Talo B", false);
+			MaintenanceTarget target2 = new MaintenanceTarget("B", false);
 			maintenanceTargetRepository.save(target2);
 
-			MaintenanceTarget target3 = new MaintenanceTarget("Talo C", false);
+			MaintenanceTarget target3 = new MaintenanceTarget("C", false);
 			maintenanceTargetRepository.save(target3);
 
 			MaintenanceTarget target4 = new MaintenanceTarget("Pysäköintialue", true);
@@ -67,20 +67,20 @@ public class HuoltovahtiApplication {
 
 			// Add Maintenance Tasks
 			MaintenanceTask task1 = new MaintenanceTask("Ulkoseinien maalaus", "Maalattu kaikki A-talon ulkoseinät", 2024, 
-				"kesä-heinäkuu", 0.0, 0.0, "valmis", 
+				"kesä-heinäkuu", "valmis", 
 				"Osakas", false, true, category2);
 			task1.getTargets().add(target1);
 			maintenanceTaskRepository.save(task1);
 
 			MaintenanceTask task2 = new MaintenanceTask("Sähkösaneeraus", "Uusittu B-talon sähköjärjestelmä", 2025, 
-				"tammikuu", 0.0, 0.0, "valmis", 
+				"tammikuu", "valmis", 
 				"Osakas", false, false, category4);
 			task2.getTargets().add(target2);
 			maintenanceTaskRepository.save(task2);
 
 			MaintenanceTask task3 = new MaintenanceTask("Kattoremontti", "Uusittu kaikkien talojen katot", 2026, 
-				"joulu-tammikuu", 0.0, 0.0, "valmis", 
-				"Taloyhtiö", false, false, category5);
+				"joulu-tammikuu",  "valmis", 
+				"Osakas", true, false, category5);
 			task3.getTargets().add(target1);
 			task3.getTargets().add(target2);
 			task3.getTargets().add(target3);
