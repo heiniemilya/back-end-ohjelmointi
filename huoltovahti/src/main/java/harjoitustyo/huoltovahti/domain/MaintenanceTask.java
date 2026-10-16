@@ -27,42 +27,42 @@ public class MaintenanceTask {
     @GeneratedValue(strategy = GenerationType.AUTO) // Automatically  generates a unique primary key for every new entity object
     private Long id;
 
-    @NotBlank(message = "Title is required")
+    @NotBlank(message = "Anna huoltotyölle ostikko")
     private String title;
 
     private String description;
 
-    @Min(value = 1000, message = "Year must be 4 digits")
-    @Max(value = 9999, message = "Year must be 4 digits")
+    @NotNull(message = "Lisää valmistumisvuosi")
+    @Min(value = 1000, message = "Tarkista vuosiluku")
+    @Max(value = 9999, message = "Tarkista vuosiluku")
     private Integer taskYear;
 
     private String timeframe;
 
-    private Double estimatedCost;
-
-    private Double actualCost;
-
     private String status;
 
+    @NotNull(message = "Kenellä on kunnossapitovastuu?")
     private String responsibility;
     
-    private boolean isPaidByCompany;
+    @NotNull(message = "Onko taloyhtiö rahoittanut huoltotyön?")
+    private Boolean isPaidByCompany;
 
-    private boolean isSelfPerformed; 
+    @NotNull(message = "Valitse kuka työn on suorittanut")
+    private Boolean isSelfPerformed; 
 
     // Many-to-One: MaintenanceTask -> Category
-    @NotNull(message = "Select category for maintenance task")
+    @NotNull(message = "Valitse kategoria")
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category; 
 
     // One-to-Many: MaintenanceTask -> Contractor
     @JsonIgnore 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy ="maintenanceTask")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy ="task")
     private List<Contractor> contractors;
 
-    // Many-to-Many: MaintanenceTask -> MaintenanceTarget
-    @NotEmpty(message = "Select at least one target for maintenance task")
+    // Many-to-Many: MaintenanceTask -> MaintenanceTarget
+    @NotEmpty(message = "Valitse huollettu kohde")
     @ManyToMany
     @JoinTable(
         name = "task_target",
@@ -76,14 +76,12 @@ public class MaintenanceTask {
     }
 
     // Constructor
-    public MaintenanceTask(String title, String description, Integer year, String timeframe, Double estimatedCost, 
-            Double actualCost, String status, String responsibility, boolean isPaidByCompany, boolean isSelfPerformed, Category category) {
+    public MaintenanceTask(String title, String description, Integer year, String timeframe, String status, 
+            String responsibility, boolean isPaidByCompany, boolean isSelfPerformed, Category category) {
         this.title = title;
         this.description = description;
         this.taskYear = year;
         this.timeframe = timeframe;
-        this.estimatedCost = estimatedCost;
-        this.actualCost = actualCost;
         this.status = status;
         this.responsibility = responsibility;
         this.isPaidByCompany = isPaidByCompany;
@@ -132,22 +130,6 @@ public class MaintenanceTask {
         this.timeframe = timeframe;
     }
 
-    public Double getEstimatedCost() {
-        return estimatedCost;
-    }
-
-    public void setEstimatedCost(Double estimatedCost) {
-        this.estimatedCost = estimatedCost;
-    }
-
-    public Double getActualCost() {
-        return actualCost;
-    }
-
-    public void setActualCost(Double actualCost) {
-        this.actualCost = actualCost;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -164,19 +146,19 @@ public class MaintenanceTask {
         this.responsibility = responsibility;
     }
 
-    public boolean isPaidByCompany() {
+    public Boolean getIsPaidByCompany() {
         return isPaidByCompany;
     }
 
-    public void setPaidByCompany(boolean isPaidByCompany) {
+    public void setIsPaidByCompany(boolean isPaidByCompany) {
         this.isPaidByCompany = isPaidByCompany;
     }
 
-    public boolean isSelfPerformed() {
+    public Boolean getIsSelfPerformed() {
         return isSelfPerformed;
     }
 
-    public void setSelfPerformed(boolean isSelfPerformed) {
+    public void setIsSelfPerformed(boolean isSelfPerformed) {
         this.isSelfPerformed = isSelfPerformed;
     }
 
@@ -207,9 +189,9 @@ public class MaintenanceTask {
     @Override
     public String toString() {
         return "MaintenanceTask [id=" + id + ", title=" + title + ", description=" + description + ", taskYear=" + taskYear
-                + ", timeframe=" + timeframe + ", estimatedCost=" + estimatedCost + ", actualCost=" + actualCost
-                + ", status=" + status + ", responsibility=" + responsibility + ", isPaidByCompany=" + isPaidByCompany 
-                + ", isSelfPerformed=" + isSelfPerformed + ", category=" + category + ", targets=" + targets + ", contractors=" + contractors + "]";
+                + ", timeframe=" + timeframe + ", estimatedCost=" + ", status=" + status + ", responsibility=" + responsibility 
+                + ", isPaidByCompany=" + isPaidByCompany + ", isSelfPerformed=" + isSelfPerformed + ", category=" + category 
+                + ", targets=" + targets + ", contractors=" + contractors + "]";
     }
 
 }
