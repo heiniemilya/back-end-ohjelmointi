@@ -37,10 +37,9 @@ public class MaintenanceTaskController {
     public String showIndex(@RequestParam(required = false) Long categoryId,
                             @RequestParam(required = false) Long targetId,
                             Model model) {
-
-        List<MaintenanceTask> tasks;
         
         // Filter maintenance tasks
+        List<MaintenanceTask> tasks;
         if (categoryId != null && targetId != null) {
             tasks = maintenanceTaskRepository.findByCategoryIdAndTargetsIdOrderByTaskYearDesc(categoryId, targetId);
             log.info("showIndex() called with category id: " + categoryId + " and target id: " + targetId);
@@ -66,4 +65,13 @@ public class MaintenanceTaskController {
         return "/index";
     }   
 
+    // Add new maintenance task
+    @GetMapping("/addMaintenanceTask")
+    public String addMaintenanceTask(Model model) {
+        log.info("addMaintenanceTask() called");
+        model.addAttribute("maintenanceTask", new MaintenanceTask());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("targets", maintenanceTargetRepository.findAll());
+        return "/addMaintenanceTask";
+    }
 }
