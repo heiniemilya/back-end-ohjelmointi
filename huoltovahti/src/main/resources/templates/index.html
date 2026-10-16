@@ -14,56 +14,96 @@
             <a href="/addMaintenanceTask" class="btn btn-success text-nowrap px-4 mx-3">Lisää uusi huoltotyö</a>
         </div>
 
+        <!-------- FILTERS --------->
+        <div class="bg-light p-3 rounded-4 mb-3">
+            <form th:action="@{/index}" method="get" class="row align-items-center mx-1">
+                <div class="col-md-5 d-flex align-items-center gap-2 mt-0 p-1">
+                    <label class="form-label mb-0">Kategoria:</label>
+                    <select name="categoryId" class="form-select">
+                        <option value="">Kaikki kategoriat</option>
+                        <option th:each="category : ${categories}" 
+                                th:value="${category.id}" 
+                                th:text="${category.name}" 
+                                th:selected="${selectedCategoryId == category.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-5 d-flex align-items-center gap-2 mt-0 p-1">
+                    <label class="form-label mb-0">Kohde:</label>
+                    <select name="targetId" class="form-select">
+                        <option value="">Kaikki kohteet</option>
+                        <option th:each="target : ${targets}" 
+                                th:value="${target.id}" 
+                                th:text="${target.name}" 
+                                th:selected="${selectedTargetId == target.id}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-2 d-flex gap-2 mt-0 p-1">
+                    <button type="submit" class="btn btn-secondary w-100">Suodata</button>
+                    <i><a th:href="@{/index}" class="btn btn-outline-secondary bi bi-x-lg"></a></i>
+                </div>
+            </form>
+        </div>
+
         <!-------- MAINTENANCE TASK TABLE --------->
-        <table class="table table-striped align-middle table-borderless">
-            <tr class="table-success">
-                <th>Ajankohta</th>
-                <th>Kohde</th>
-                <th>Huoltotyö</th>
-                <th>Työn tekijä</th>
-                <th>Vastuu</th>
-                <th>Yhtiön <br>rahoitus</th>
-                <th></th>
-            </tr>
-            <tr th:each = "maintenanceTask : ${maintenanceTasks}">
-                <!-- Year & Timeframe -->
-                <td>
-                    <div th:text="${maintenanceTask.taskYear}" class="fw-bold"></div>
-                    <div th:text="${maintenanceTask.timeframe}"></div>
-                </td>
-                <!-- Target -->
-                <td>
-                    <span th:each="target : ${maintenanceTask.targets}">
-                        <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
-                        class="badge bg-secondary text-light text-decoration-none" 
-                        th:text="${target.name}"></a>
-                    </span>
-                </td>
-                <!-- Title & Description -->
-                <td>
-                    <div th:text="${maintenanceTask.title}" class="fw-bold"></div>
-                    <div th:text="${maintenanceTask.description}"></div>
-                </td>
-                <!-- Contractor -->
-                <td>
-                    <span th:each="contractor, iterStat : ${maintenanceTask.contractors}">
-                        <span th:text="${contractor.name}"></span><span th:if="${!iterStat.last}">, </span>
-                    </span>
-                    <span th:if="${maintenanceTask.isSelfPerformed}">Osakas</span>  
-                </td>
-                <!-- Responsibility -->
-                <td th:text="${maintenanceTask.responsibility}"></td>
-                <!-- Paid by Company -->
-                <td>
-                    <i th:if="${maintenanceTask.isPaidByCompany}" class="bi bi-check-circle-fill text-success"></i>
-                    <i th:unless="${maintenanceTask.isPaidByCompany}" class="bi bi-dash text-muted"></i>
-                </td>
-                <!-- Edit -->
-                <td>
-                    <i><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="bi bi-pencil-square text-secondary"></a></i>
-                </td>
-            </tr>
-        </table>
+        <div class="table-responsive rounded-4 overflow-x-auto border">
+            <table class="table table-hover table-borderless mb-0 ">
+                <thead>
+                    <tr class="table-success align-middle">
+                        <th class="ps-3">Ajankohta</th>
+                        <th>Kohde</th>
+                        <th>Huoltotyö</th>
+                        <th>Työn tekijä</th>
+                        <th>Vastuu</th>
+                        <th>Yhtiön <br>rahoitus</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each = "maintenanceTask : ${maintenanceTasks}" class="border-bottom align-middle">
+                        <!-- Year & Timeframe -->
+                        <td class="ps-3">
+                            <div th:text="${maintenanceTask.taskYear}" class="fw-bold"></div>
+                            <div th:text="${maintenanceTask.timeframe}"></div>
+                        </td>
+                        <!-- Target -->
+                        <td>
+                            <span th:each="target : ${maintenanceTask.targets}">
+                                <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
+                                class="badge bg-secondary text-light text-decoration-none" 
+                                th:text="${target.name}"></a>
+                            </span>
+                        </td>
+                        <!-- Title & Description -->
+                        <td>
+                            <div th:text="${maintenanceTask.title}" class="fw-bold"></div>
+                            <div th:text="${maintenanceTask.description}"></div>
+                        </td>
+                        <!-- Contractor -->
+                        <td>
+                            <span th:each="contractor, iterStat : ${maintenanceTask.contractors}">
+                                <span th:text="${contractor.name}"></span><span th:if="${!iterStat.last}">, </span>
+                            </span>
+                            <span th:if="${maintenanceTask.isSelfPerformed}">Osakas</span>  
+                        </td>
+                        <!-- Responsibility -->
+                        <td th:text="${maintenanceTask.responsibility}"></td>
+                        <!-- Paid by Company -->
+                        <td class="ps-4">
+                            <i th:if="${maintenanceTask.isPaidByCompany}" class="bi bi-check-circle-fill text-success"></i>
+                            <i th:unless="${maintenanceTask.isPaidByCompany}" class="bi bi-dash text-muted fs-5"></i>
+                        </td>
+                        <!-- Edit -->
+                        <td>
+                            <i><a th:href="@{/edit/{id}(id=${maintenanceTask.id})}" class="bi bi-pencil-square text-secondary fs-5"></a></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
      </div>
     
   </body>
