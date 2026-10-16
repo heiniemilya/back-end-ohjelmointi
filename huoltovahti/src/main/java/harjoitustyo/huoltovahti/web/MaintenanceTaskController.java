@@ -31,7 +31,7 @@ public class MaintenanceTaskController {
     @GetMapping({"/", "/index"})
     public String showIndex(Model model) {
         log.info("showIndex() called");
-        model.addAttribute("maintenanceTasks", maintenanceTaskRepository.findAll());
+        model.addAttribute("maintenanceTasks", maintenanceTaskRepository.findAllByOrderByTaskYearDesc());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
         return "/index";
