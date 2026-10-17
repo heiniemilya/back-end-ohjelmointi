@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -92,5 +93,39 @@ public class MaintenanceTaskController {
         maintenanceTaskRepository.save(task);
         return "redirect:/index";
     }
+
+    // Edit maintenance task by ID
+    @GetMapping("/edit/{id}")
+    public String editMaintenanceTask(@PathVariable Long id, Model model) {
+        log.info("editMaintenanceTask() called with ID: {}", id);
+        MaintenanceTask task = maintenanceTaskRepository.findById(id).get();
+        model.addAttribute("taskToEdit", task);
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("targets", maintenanceTargetRepository.findAll());
+        return "/editMaintenanceTask";
+    }
+
+    // Save and validate edited maintenance task
+    @PostMapping("/saveEditedTask")
+    public String saveEditedTask(@Valid @ModelAttribute("taskToEdit") MaintenanceTask taskToEdit, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            log.error("Validation error happened, edited task: " + taskToEdit);
+            model.addAttribute("categories", categoryRepository.findAll());
+            model.addAttribute("targets", maintenanceTargetRepository.findAll());
+            return "editMaintenanceTask";
+        }
+        log.info("Validation passed, saving edited task: " + taskToEdit);
+        maintenanceTaskRepository.save(taskToEdit);
+        return "redirect:/index";
+    }
+
+    // Delete maintenance task by ID
+    @GetMapping("/delete/{id}")
+    public String deleteTask(@PathVariable Long id) {
+        log.info("deleteTask() called with ID: {}", id);
+        maintenanceTaskRepository.deleteById(id);
+        return "redirect:/index";
+    }
+
 
 }
