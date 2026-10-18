@@ -18,12 +18,12 @@
 
         <!-------- FORM --------->
          <div class="bg-light shadow-sm rounded-4 container mx-auto my-5 p-4" style="width: 700px;">
-            <h1 class="mb-4 fs-4 text-primary">Uusi huoltotyö</h1>
+            <h1 class="mb-4 fs-4 text-primary fw-bold">Uusi huoltotyö</h1>
             <form class="row" th:object="${task}" th:action="@{saveAndValidate}" action="#" method="post">
 
                 <!--Targets-->
                 <div class="col-md-12 mb-3">
-                    <label class="form-label" for="targetlist">Kohteet:</label>
+                    <label class="form-label opacity-75 fw-bold" for="targetlist">Kohteet:</label>
                     <div class="d-flex gap-3 p-2">
                         <div th:each="target : ${targets}" class="form-check">
                             <input class="form-check-input" 
@@ -42,14 +42,14 @@
 
                 <!--Title-->
                 <div class="col-md-7 mb-3">
-                    <label class="form-label" for="title">Otsikko: </label>
+                    <label class="form-label opacity-75 fw-bold" for="title">Otsikko: </label>
                     <input class="form-control" type="text" id="title" th:field="*{title}" />
                     <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-danger small mt-1" >Error</span>
                 </div>
 
                 <!--Category-->
                 <div class="col-md-5 mb-3">
-                    <label class="form-label" for="categorylist">Kategoria:</label>
+                    <label class="form-label opacity-75 fw-bold" for="categorylist">Kategoria:</label>
                     <select id="categorylist" th:field="*{category}" class="form-select">
                         <option th:value="null">Valitse kategoria</option>
                         <option th:each="category: ${categories}"
@@ -60,69 +60,76 @@
                     <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="text-danger small mt-1">Error</span>
                 </div>
 
-                 <!--Responsibility-->
-                <div class="col-md-5 mb-3 pt-2">
-                    <label class="form-label d-block">Kunnossapitovastuu:</label>
-                    <div class="form-check form-check-inline m-2">
-                        <input class="form-check-input" type="radio" th:field="*{responsibility}" id="shareholder" value="Osakas">
-                        <label class="form-check-label" for="shareholder">Osakas</label>
-                    </div>
-                    <div class="form-check form-check-inline m-2">
-                        <input class="form-check-input" type="radio" th:field="*{responsibility}" id="company" value="Taloyhtiö">
-                        <label class="form-check-label" for="company">Taloyhtiö</label>
-                    </div>
-                    <div th:if="${#fields.hasErrors('responsibility')}" th:errors="*{responsibility}" class="text-danger small mt-1"></div>
-                </div>
-
-                <!--Paid by-->
-                <div class="col-md-7 mb-3 pt-2">
-                    <label class="form-label d-block">Taloyhtiön rahoittama:</label>
-                     <div class="form-check form-check-inline m-2">
-                        <input class="form-check-input" type="radio" th:field="*{isPaidByCompany}" id="notpaid" value="false">
-                        <label class="form-check-label" for="notpaid">Ei</label>
-                    </div>
-                    <div class="form-check form-check-inline m-2">
-                        <input class="form-check-input" type="radio" th:field="*{isPaidByCompany}" id="paid" value="true">
-                        <label class="form-check-label" for="paid">Kyllä</label>
-                    </div>
-                    <div th:if="${#fields.hasErrors('isPaidByCompany')}" th:errors="*{isPaidByCompany}" class="text-danger small mt-1"></div>
-                </div>
-
                 <!--Description-->
-                <div class="mb-3">
-                    <label class="form-label" for="description">Kuvaus: </label>
-                    <textarea class="form-control" type="text" id="descriptionr" th:field="*{description}" rows="3"></textarea>
+                <div class="col-md-7 mb-3">
+                    <label class="form-label opacity-75 fw-bold" for="description">Kuvaus: </label>
+                    <textarea class="form-control" type="text" id="descriptionr" th:field="*{description}" rows="6"></textarea>
                     <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger" >Error</span>
                 </div>
 
+                <div class="col-md-5 mb-3">
+                    <!--Responsibility-->
+                    <div class="col-auto mb-3 pt-2">
+                        <label class="form-label d-block opacity-75 fw-bold">Kunnossapitovastuu:</label>
+                        <div class="form-check form-check-inline m-2 mt-0">
+                            <input class="form-check-input" type="radio" th:field="*{responsibility}" id="shareholder" value="Osakas">
+                            <label class="form-check-label" for="shareholder">Osakas</label>
+                        </div>
+                        <div class="form-check form-check-inline m-2 mt-0">
+                            <input class="form-check-input" type="radio" th:field="*{responsibility}" id="company" value="Taloyhtiö">
+                            <label class="form-check-label" for="company">Taloyhtiö</label>
+                        </div>
+                        <div th:if="${#fields.hasErrors('responsibility')}" th:errors="*{responsibility}" class="text-danger small"></div>
+                    </div>
+                    <!--Paid by-->
+                    <div class="col-auto mb-3 pt-2">
+                        <label class="form-label d-block opacity-75 fw-bold">Taloyhtiön rahoittama:</label>
+                        <div class="form-check form-check-inline m-2 mt-0">
+                            <input class="form-check-input" type="radio" th:field="*{isPaidByCompany}" id="notpaid" value="false">
+                            <label class="form-check-label" for="notpaid">Ei</label>
+                        </div>
+                        <div class="form-check form-check-inline m-2 mt-0">
+                            <input class="form-check-input" type="radio" th:field="*{isPaidByCompany}" id="paid" value="true">
+                            <label class="form-check-label" for="paid">Kyllä</label>
+                        </div>
+                        <div th:if="${#fields.hasErrors('isPaidByCompany')}" th:errors="*{isPaidByCompany}" class="text-danger small"></div>
+                    </div>
+                </div>
+
                 <!--Year-->
-                <div class="col-md-4 mb-3">
-                    <label class="form-label" for="taskYear">Valmistumisvuosi: </label>
+                <div class="col-md-2 mb-3 mt-2">
+                    <label class="form-label opacity-75 fw-bold" for="taskYear">Vuosi: </label>
                     <input class="form-control" type="number" id="taskYear" th:field="*{taskYear}" />
                     <span th:if="${#fields.hasErrors('taskYear')}" th:errors="*{taskYear}" class="text-danger small mt-1" >Error</span>
                 </div>
 
                 <!--Timeframe-->
-                <div class="col-md-6 mb-3">
-                    <label class="form-label" for="timeframe">Ajankohta: </label>
+                <div class="col-md-5 mb-3 mt-2">
+                    <label class="form-label opacity-75 fw-bold" for="timeframe">Ajankohta: </label>
                     <input class="form-control" type="text" id="timeframe" placeholder="esim. heinäkuu" th:field="*{timeframe}" />
                     <span th:if="${#fields.hasErrors('timeframe')}" th:errors="*{timeframe}" class="text-danger small mt-1" >Error</span>
                 </div>
+                <div class="col-md-4"></div>
 
                 <!--Performed by-->
-                <div class="col-md-12 mb-3 pt-2">
-                    <label class="form-label d-block">Työn suorittaja:</label>
-                    <div class="form-check form-check-inline m-2">
-                        <input class="form-check-input" type="radio" th:field="*{isSelfPerformed}" id="diy" value="true">
-                        <label class="form-check-label" for="diy">Tehty itse</label>
+                <div class="col-md-12 mb-3 mt-2">
+                    <label class="form-label d-block opacity-75 fw-bold">Työn suorittaja:</label>
+                   <!--Contractor and business id -->
+                    <div class="input-group mb-3 pt-1">
+                        <span class="input-group-text"><i class="bi bi-building opacity-75"></i></span>
+                        <input type="text" id="contractor" th:field="*{contractor}" class="form-control w-50" placeholder="Urakoitsija" aria-label="Urakoitsija">
+                        <span class="input-group-text fw-semibold opacity-75">Y-tunnus</span>
+                        <input type="text" id="contractorBusinessId" th:field="*{contractorBusinessId}" class="form-control w-25" placeholder="1234567-8" aria-label="Y-tunnus">
+                        <span th:if="${#fields.hasErrors('contractorBusinessId')}" th:errors="*{contractorBusinessId}" class="text-danger small mt-1" >Error</span>
                     </div>
-                    <div class="form-check form-check-inline m-2">
-                        <input class="form-check-input" type="radio" th:field="*{isSelfPerformed}" id="contractor" value="false">
-                        <label class="form-check-label" for="contractor">Käytetty urakoitsijaa</label>
+                    <!--Self performed-->
+                    <div class="form-check form-check-inline m-2 mt-0">
+                        <input class="form-check-input" type="checkbox" th:field="*{isSelfPerformed}" id="diy" value="true">
+                        <label class="form-check-label" for="diy">Tehty itse (osakas / talkoot)</label>
                     </div>
-                    <div th:if="${#fields.hasErrors('isSelfPerformed')}" th:errors="*{isSelfPerformed}" class="text-danger small mt-1"></div>
+                    <div th:if="${#fields.hasErrors('contractor')}" th:errors="*{contractor}" class="text-danger small mt-1"></div>
                 </div>
-
+                    
                 <!--Buttons-->
                 <div class="mt-4 col-12 d-flex justify-content-end gap-2">
                     <a class="btn btn-outline-secondary" href="/index" role="button">Peruuta</a>
