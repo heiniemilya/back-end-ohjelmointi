@@ -20,7 +20,8 @@
          <div class="bg-light shadow-sm rounded-4 container mx-auto my-5 p-4" style="width: 700px;">
             <h1 class="mb-4 fs-4 text-primary fw-bold">Uusi huoltotyö</h1>
             <form class="row" th:object="${task}" th:action="@{saveAndValidate}" action="#" method="post">
-
+                <!-- Hidden fields-->
+                <input type="hidden" th:field="*{isPlanned}" />
                 <!--Targets-->
                 <div class="col-md-12 mb-3">
                     <label class="form-label opacity-75 fw-bold" for="targetlist">Kohteet:</label>

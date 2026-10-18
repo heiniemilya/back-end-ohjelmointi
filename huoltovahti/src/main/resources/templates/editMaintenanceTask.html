@@ -24,8 +24,9 @@
             </div>
 
             <form class="row" th:object="${taskToEdit}" th:action="@{/saveEditedTask}" action="#" method="post">
-                <!-- ID field hidden-->
+                <!-- Hidden fields-->
                 <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{isPlanned}" />
                 <!--Targets-->
                 <div class="col-md-12 mb-3">
                     <label class="form-label" for="targetlist">Kohteet:</label>
