@@ -7,8 +7,6 @@ import org.springframework.context.annotation.Bean;
 
 import harjoitustyo.huoltovahti.domain.Category;
 import harjoitustyo.huoltovahti.domain.CategoryRepository;
-import harjoitustyo.huoltovahti.domain.Contractor;
-import harjoitustyo.huoltovahti.domain.ContractorRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTarget;
 import harjoitustyo.huoltovahti.domain.MaintenanceTargetRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTask;
@@ -24,7 +22,7 @@ public class HuoltovahtiApplication {
 	// Add demo data to H2 database
 	@Bean
 	public CommandLineRunner demo(CategoryRepository categoryRepository, MaintenanceTaskRepository maintenanceTaskRepository, 
-			MaintenanceTargetRepository maintenanceTargetRepository, ContractorRepository contractorRepository) {
+			MaintenanceTargetRepository maintenanceTargetRepository) {
 		return (args) -> {
 
 			// Add categories
@@ -67,34 +65,24 @@ public class HuoltovahtiApplication {
 
 			// Add Maintenance Tasks
 			MaintenanceTask task1 = new MaintenanceTask("Ulkoseinien maalaus", "Maalattu kaikki A-talon ulkoseinät", 2024, 
-				"kesä-heinäkuu", "valmis", 
-				"Osakas", false, true, category2);
+				"kesä-heinäkuu", false, "Osakas", false, 
+				true, null, null, category2);
 			task1.getTargets().add(target1);
 			maintenanceTaskRepository.save(task1);
 
 			MaintenanceTask task2 = new MaintenanceTask("Sähkösaneeraus", "Uusittu B-talon sähköjärjestelmä", 2025, 
-				"tammikuu", "valmis", 
-				"Osakas", false, false, category4);
+				"tammikuu", false, "Osakas", false, 
+				false, "Sähkötyöt Oy", "9876543-2", category4);
 			task2.getTargets().add(target2);
 			maintenanceTaskRepository.save(task2);
 
 			MaintenanceTask task3 = new MaintenanceTask("Kattoremontti", "Uusittu kaikkien talojen katot", 2026, 
-				"joulu-tammikuu",  "valmis", 
-				"Osakas", true, false, category5);
+				"joulu-tammikuu",  false, "Osakas", true, 
+				false, "Kattoremppa Oy", "1234567-8", category5);
 			task3.getTargets().add(target1);
 			task3.getTargets().add(target2);
 			task3.getTargets().add(target3);
 			maintenanceTaskRepository.save(task3);
-
-			// Add Contractors
-			Contractor contractor1 = new Contractor("Kattoremppa Oy", "1234567-8", 
-				"Rakennusurakointi", "040 123 4567", "rakennusliike@oy.fi", "www.rakennusliike.oy", task3);
-			contractorRepository.save(contractor1);
-
-			Contractor contractor2 = new Contractor("Sähkötyöt Oy", "9876543-2", 
-				"Sähköasennus", "050 987 6543", "sahko@oy.fi", "www.sahko.oy", task2);
-			contractorRepository.save(contractor2);
-
 		};
 	}
 }
