@@ -94,10 +94,9 @@
                         </td>
                         <!-- Contractor -->
                         <td>
-                            <span th:each="contractor, iterStat : ${task.contractors}">
-                                <span th:text="${contractor.name}"></span><span th:if="${!iterStat.last}">, </span>
-                            </span>
-                            <span th:if="${task.isSelfPerformed}">Osakas</span>  
+                            <div th:text="${task.contractor}"></div>
+                            <div th:text="${task.contractorBusinessId}" class="text-secondary"></div>
+                            <div th:if="${task.isSelfPerformed}">Tehty itse</div>  
                         </td>
                         <!-- Responsibility -->
                         <td th:text="${task.responsibility}"></td>
@@ -108,7 +107,7 @@
                         </td>
                         <!-- Edit -->
                         <td>
-                            <i><a th:href="@{/edit/{id}(id=${task.id})}" class="bi bi-pencil-square text-primary fs-5"></a></i>
+                            <i><a th:href="@{/edit/{id}(id=${task.id})}" class="bi bi-pencil-square text-primary fs-5" title="Muokkaa"></a></i>
                         </td>
                     </tr>
                 </tbody>
