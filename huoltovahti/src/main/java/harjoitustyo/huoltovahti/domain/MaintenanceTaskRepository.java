@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MaintenanceTaskRepository extends CrudRepository<MaintenanceTask, Long> {
-    List<MaintenanceTask> findAllByOrderByTaskYearDesc();
+    List<MaintenanceTask> findTop10ByIsPlannedFalseOrderByTaskYearDescIdDesc();
 
-    List<MaintenanceTask> findByCategoryIdAndTargetsIdOrderByTaskYearDesc(Long categoryId, Long targetId);
+    List<MaintenanceTask> findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
 
-    List<MaintenanceTask> findByCategoryIdOrderByTaskYearDesc(Long categoryId);
+    List<MaintenanceTask> findByIsPlannedFalseAndCategoryIdAndTargetsIdOrderByTaskYearDescIdDesc(Long categoryId, Long targetId);
 
-    List<MaintenanceTask> findByTargetsIdOrderByTaskYearDesc(Long targetId);
+    List<MaintenanceTask> findByIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(Long categoryId);
+
+    List<MaintenanceTask> findByIsPlannedFalseAndTargetsIdOrderByTaskYearDescIdDesc(Long targetId);
+
+    List<MaintenanceTask> findByIsPlannedTrueOrderByTaskYearAsc();
 }
