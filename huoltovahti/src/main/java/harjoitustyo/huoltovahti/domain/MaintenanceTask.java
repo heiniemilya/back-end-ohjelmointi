@@ -3,9 +3,6 @@ package harjoitustyo.huoltovahti.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,12 +11,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity  // Represents a table in relational database 
 public class MaintenanceTask {
@@ -39,7 +36,7 @@ public class MaintenanceTask {
 
     private String timeframe;
 
-    private String status;
+    private Boolean isPlanned;
 
     @NotNull(message = "Kenellä on kunnossapitovastuu?")
     private String responsibility;
@@ -47,19 +44,20 @@ public class MaintenanceTask {
     @NotNull(message = "Onko taloyhtiö rahoittanut huoltotyön?")
     private Boolean isPaidByCompany;
 
-    @NotNull(message = "Valitse kuka työn on suorittanut")
+    // Validation in MaintenanceTaskController
     private Boolean isSelfPerformed; 
+
+    // Validation in MaintenanceTaskController
+    private String contractor;
+
+    @Pattern(regexp = "^$|^\\d{7}-\\d$", message = "Y-tunnuksen muoto on 1234567-8")
+    private String contractorBusinessId;
 
     // Many-to-One: MaintenanceTask -> Category
     @NotNull(message = "Valitse kategoria")
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category; 
-
-    // One-to-Many: MaintenanceTask -> Contractor
-    @JsonIgnore 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy ="task")
-    private List<Contractor> contractors;
 
     // Many-to-Many: MaintenanceTask -> MaintenanceTarget
     @NotEmpty(message = "Valitse huollettu kohde")
@@ -76,16 +74,18 @@ public class MaintenanceTask {
     }
 
     // Constructor
-    public MaintenanceTask(String title, String description, Integer year, String timeframe, String status, 
-            String responsibility, boolean isPaidByCompany, boolean isSelfPerformed, Category category) {
+    public MaintenanceTask(String title, String description, Integer year, String timeframe, Boolean isPlanned, 
+            String responsibility, Boolean isPaidByCompany, Boolean isSelfPerformed, String contractor, String contractorBusinessId, Category category) {
         this.title = title;
         this.description = description;
         this.taskYear = year;
         this.timeframe = timeframe;
-        this.status = status;
+        this.isPlanned = isPlanned;
         this.responsibility = responsibility;
         this.isPaidByCompany = isPaidByCompany;
         this.isSelfPerformed = isSelfPerformed;
+        this.contractor = contractor;
+        this.contractorBusinessId = contractorBusinessId;
         this.category = category;
     }
 
@@ -130,12 +130,12 @@ public class MaintenanceTask {
         this.timeframe = timeframe;
     }
 
-    public String getStatus() {
-        return status;
+    public Boolean getIsPlanned() {
+        return isPlanned;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setIsPlanned(Boolean isPlanned) {
+        this.isPlanned = isPlanned;
     }
 
     public String getResponsibility() {
@@ -162,6 +162,22 @@ public class MaintenanceTask {
         this.isSelfPerformed = isSelfPerformed;
     }
 
+    public String getContractor() {
+        return contractor;
+    }
+
+    public void setContractor(String contractor) {
+        this.contractor = contractor;
+    }
+
+    public String getContractorBusinessId() {
+        return contractorBusinessId;
+    }
+
+    public void setContractorBusinessId(String contractorBusinessId) {
+        this.contractorBusinessId = contractorBusinessId;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -178,20 +194,12 @@ public class MaintenanceTask {
         this.targets = targets;
     }
 
-    public List<Contractor> getContractors() {
-        return contractors;
-    }
-
-    public void setContractors(List<Contractor> contractors) {
-        this.contractors = contractors;
-    }
-
     @Override
     public String toString() {
         return "MaintenanceTask [id=" + id + ", title=" + title + ", description=" + description + ", taskYear=" + taskYear
-                + ", timeframe=" + timeframe + ", estimatedCost=" + ", status=" + status + ", responsibility=" + responsibility 
-                + ", isPaidByCompany=" + isPaidByCompany + ", isSelfPerformed=" + isSelfPerformed + ", category=" + category 
-                + ", targets=" + targets + ", contractors=" + contractors + "]";
+                + ", timeframe=" + timeframe + ", estimatedCost=" + ", isPlanned=" + isPlanned + ", responsibility=" + responsibility 
+                + ", isPaidByCompany=" + isPaidByCompany + ", isSelfPerformed=" + isSelfPerformed + ", contractor=" + contractor 
+                + "contractorBusinessId=" + contractorBusinessId + ", category=" + category + ", targets=" + targets + "]";
     }
 
 }
