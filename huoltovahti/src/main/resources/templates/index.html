@@ -7,112 +7,114 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
   </head>
-  <body >
+  <body>
+
+    <div class="my-2 mx-3 d-flex justify-content-between align-items-end">
+        <a th:href="@{/index}" class="text-decoration-none text-dark fs-2 fw-bold">
+            Huolto<span class="text-primary fw-normal">vahti</span>
+        </a>
+    </div>
+
     <div class="container my-5">
-
-        <div class="mb-5 d-flex justify-content-between align-items-end">
-            <a th:href="@{/index}" class="text-decoration-none text-dark fs-2 fw-bold">
-                Huolto<span class="text-primary fw-normal">vahti</span>
-            </a>
-        </div>
-
-        <!-------- FILTERS --------->
-        <div class="container px-0">
-            <div class="d-flex justify-content-between align-items-center py-3 px-4">
-                 <div class="col-md-7">
-                    <form th:action="@{/index}" method="get" class="row align-items-center">
-                        <div class="col-md-5 d-flex align-items-center gap-2 mt-0 p-1">
-                            <label class="form-label mb-0">Kategoria:</label>
-                            <select name="categoryId" class="form-select" onchange="this.form.submit()">
-                                <option value="">Kaikki kategoriat</option>
-                                <option th:each="category : ${categories}" 
-                                        th:value="${category.id}" 
-                                        th:text="${category.name}" 
-                                        th:selected="${selectedCategoryId == category.id}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-5 d-flex align-items-center gap-2 mt-0 p-1">
-                            <label class="form-label mb-0 ms-2">Kohde:</label>
-                            <select name="targetId" class="form-select" onchange="this.form.submit()">
-                                <option value="">Kaikki kohteet</option>
-                                <option th:each="target : ${targets}" 
-                                        th:value="${target.id}" 
-                                        th:text="${target.name}" 
-                                        th:selected="${selectedTargetId == target.id}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="col-md-2 gap-2 mt-0 p-1 ps-2">
-                            <a th:if="${selectedCategoryId != null or selectedTargetId != null}" 
-                                th:href="@{/index}" 
-                                title="Tyhjennä suodatukset">
-                                <i class="fs-4 text-secondary bi bi-x-square-fill"></i></i>
-                            </a>
-                        </div>
-                    </form>
+        <div class="row g-4">
+            <!-------- MAINTENANCE HISTORY --------->
+            <div class="col-xl-8"> 
+                <div class="ps-2">
+                    <h3 class="text-secondary fw-light">Viimeisimmät huoltotyöt</h3>
                 </div>
-                <div>
-                    <a href="/addMaintenanceTask" class="btn btn-primary text-nowrap px-3">Lisää uusi huoltotyö</a>
+               
+                <!-------- MAINTENANCE TASK TABLE --------->
+                <div class="table-responsive rounded-4 overflow-x-auto shadow-sm">
+                    <table class="table table-hover table-borderless mb-0 ">
+                        <thead>
+                            <tr class="table-primary align-middle small">
+                                <th class="ps-3">Ajankohta</th>
+                                <th>Kohde</th>
+                                <th>Huoltotyö</th>
+                                <th>Työn suorittaja</th>
+                                <th>Vastuu</th>
+                                <th>Yhtiön rahoitus</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each = "task : ${tasks}" class="border-bottom align-middle table-light">
+                                <!-- Year & Timeframe -->
+                                <td class="ps-3">
+                                    <div th:text="${task.taskYear}" class="fw-bold"></div>
+                                    <div th:text="${task.timeframe}"></div>
+                                </td>
+                                <!-- Target -->
+                                <td>
+                                    <span th:each="target : ${task.targets}">
+                                        <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
+                                        class="badge bg-primary text-light text-decoration-none" 
+                                        th:text="${target.name}"></a>
+                                    </span>
+                                </td>
+                                <!-- Title & Description -->
+                                <td>
+                                    <div th:text="${task.title}" class="fw-bold"></div>
+                                    <div th:text="${task.description}"></div>
+                                </td>
+                                <!-- Contractor -->
+                                <td>
+                                    <div th:text="${task.contractor}"></div>
+                                    <div th:text="${task.contractorBusinessId}" class="text-secondary"></div>
+                                    <div th:if="${task.isSelfPerformed}">Tehty itse</div>  
+                                </td>
+                                <!-- Responsibility -->
+                                <td th:text="${task.responsibility}"></td>
+                                <!-- Paid by Company -->
+                                <td class="text-center">
+                                    <i th:if="${task.isPaidByCompany}" class="bi bi-check-circle-fill text-success"></i>
+                                    <i th:unless="${task.isPaidByCompany}" class="bi bi-dash text-muted fs-5"></i>
+                                </td>
+                                <!-- Edit -->
+                                <td>
+                                    <i><a th:href="@{/edit/{id}(id=${task.id})}" class="bi bi-pencil-square text-primary fs-5 pe-2" title="Muokkaa"></a></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
 
-        <!-------- MAINTENANCE TASK TABLE --------->
-        <div class="table-responsive rounded-4 overflow-x-auto shadow-sm">
-            <table class="table table-hover table-borderless mb-0 ">
-                <thead>
-                    <tr class="table-primary align-middle">
-                        <th class="ps-3">Ajankohta</th>
-                        <th>Kohde</th>
-                        <th>Huoltotyö</th>
-                        <th>Työn suorittaja</th>
-                        <th>Vastuu</th>
-                        <th>Yhtiön <br>rahoitus</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each = "task : ${tasks}" class="border-bottom align-middle table-light">
-                        <!-- Year & Timeframe -->
-                        <td class="ps-3">
-                            <div th:text="${task.taskYear}" class="fw-bold"></div>
-                            <div th:text="${task.timeframe}"></div>
-                        </td>
-                        <!-- Target -->
-                        <td>
-                            <span th:each="target : ${task.targets}">
-                                <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
-                                class="badge bg-primary text-light text-decoration-none" 
-                                th:text="${target.name}"></a>
-                            </span>
-                        </td>
-                        <!-- Title & Description -->
-                        <td>
-                            <div th:text="${task.title}" class="fw-bold"></div>
-                            <div th:text="${task.description}"></div>
-                        </td>
-                        <!-- Contractor -->
-                        <td>
-                            <div th:text="${task.contractor}"></div>
-                            <div th:text="${task.contractorBusinessId}" class="text-secondary"></div>
-                            <div th:if="${task.isSelfPerformed}">Tehty itse</div>  
-                        </td>
-                        <!-- Responsibility -->
-                        <td th:text="${task.responsibility}"></td>
-                        <!-- Paid by Company -->
-                        <td class="ps-4">
-                            <i th:if="${task.isPaidByCompany}" class="bi bi-check-circle-fill text-success"></i>
-                            <i th:unless="${task.isPaidByCompany}" class="bi bi-dash text-muted fs-5"></i>
-                        </td>
-                        <!-- Edit -->
-                        <td>
-                            <i><a th:href="@{/edit/{id}(id=${task.id})}" class="bi bi-pencil-square text-primary fs-5" title="Muokkaa"></a></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            <!-------- PLANNED MAINTENANCE TASKS TABLE --------->
+            <div class="col-xl-4">
+                <h3 class="ps-2 text-secondary fw-light">Kunnossapitosuunnitelma</h3>
+                <div class="table-responsive rounded-4 overflow-x-auto shadow-sm">
+                    <table class="table table-hover table-borderless mb-0 ">
+                        <thead>
+                            <tr class="table-primary align-middle small">
+                                <th class="ps-3">Ajankohta</th>
+                                <th>Huoltotyö</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each = "task : ${tasks}" class="border-bottom align-middle table-light">
+                                <!-- Year & Timeframe -->
+                                <td class="ps-3">
+                                    <div th:text="${task.taskYear}" class="fw-bold"></div>
+                                    <div th:text="${task.timeframe}"></div>
+                                </td>
+                                <!-- Title & Description -->
+                                <td>
+                                    <div th:text="${task.title}" class="fw-bold"></div>
+                                    <div th:text="${task.description}"></div>
+                                </td>
+                                <!-- Edit -->
+                                <td>
+                                    <i><a th:href="@{/edit/{id}(id=${task.id})}" class="bi bi-pencil-square text-primary fs-5" title="Muokkaa"></a></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>        
+
      </div>
     
   </body>
