@@ -42,24 +42,37 @@ public class MaintenanceTaskController {
     public String showIndex(@RequestParam(required = false) Long categoryId,
                             @RequestParam(required = false) Long targetId,
                             Model model) {
+        List<MaintenanceTask> tasks;
+        tasks = maintenanceTaskRepository.findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("targets", maintenanceTargetRepository.findAll());
+        return "index";
+    }   
+
+    // Maintenance task history page
+    @GetMapping({"/maintenanceTaskHistory"})
+    public String showMaintenanceTaskHistory(@RequestParam(required = false) Long categoryId,
+                            @RequestParam(required = false) Long targetId,
+                            Model model) {
         // Filter maintenance tasks:
         List<MaintenanceTask> tasks;
         // Category + target selected
         if (categoryId != null && targetId != null) {
-            tasks = maintenanceTaskRepository.findByCategoryIdAndTargetsIdOrderByTaskYearDesc(categoryId, targetId);
-            log.info("showIndex() called with category id: " + categoryId + " and target id: " + targetId);
+            tasks = maintenanceTaskRepository.findByIsPlannedFalseAndCategoryIdAndTargetsIdOrderByTaskYearDescIdDesc(categoryId, targetId);
+            log.info("maintenanceTaskHistory called with category id: " + categoryId + " and target id: " + targetId);
         // Category selected
         } else if (categoryId != null) {
-            tasks = maintenanceTaskRepository.findByCategoryIdOrderByTaskYearDesc(categoryId);
-            log.info("showIndex() called with category id: " + categoryId);
+            tasks = maintenanceTaskRepository.findByIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(categoryId);
+            log.info("maintenanceTaskHistory called with category id: " + categoryId);
         // Target selected
         } else if (targetId != null) {
-            tasks = maintenanceTaskRepository.findByTargetsIdOrderByTaskYearDesc(targetId);
-            log.info("showIndex() called with target id: " + targetId);
+            tasks = maintenanceTaskRepository.findByIsPlannedFalseAndTargetsIdOrderByTaskYearDescIdDesc(targetId);
+            log.info("maintenanceTaskHistory called with target id: " + targetId);
         // Nothing selected
         } else {
-            tasks = maintenanceTaskRepository.findAllByOrderByTaskYearDesc();
-            log.info("showIndex() called with all categories and targets");
+            tasks = maintenanceTaskRepository.findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
+            log.info("maintenanceTaskHistory called with all categories and targets");
         }
         model.addAttribute("tasks", tasks);
         model.addAttribute("categories", categoryRepository.findAll());
@@ -67,16 +80,20 @@ public class MaintenanceTaskController {
         // Save selected filter values 
         model.addAttribute("selectedCategoryId", categoryId);
         model.addAttribute("selectedTargetId", targetId);
-        return "/index";
+        return "maintenanceTaskHistory";
     }   
 
     // Add new maintenance task
     @GetMapping("/addMaintenanceTask")
-    public String addMaintenanceTask(Model model) {
-        model.addAttribute("task", new MaintenanceTask());
+    public String addMaintenanceTask(@RequestParam(required = false, defaultValue = "false") boolean planned, Model model) {
+        MaintenanceTask task = new MaintenanceTask();
+        // Set value for isPlanned
+        task.setIsPlanned(planned); 
+        
+        model.addAttribute("task", task);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
-        return "/addMaintenanceTask";
+        return "addMaintenanceTask";
     }
 
     // Save and validate new maintenance task
@@ -107,7 +124,7 @@ public class MaintenanceTaskController {
         }
         log.info("Validation passed, saving task: " + task);
         maintenanceTaskRepository.save(task);
-        return "redirect:/index";
+        return "redirect:/maintenanceTaskHistory";
     }
 
     // Edit maintenance task by ID
