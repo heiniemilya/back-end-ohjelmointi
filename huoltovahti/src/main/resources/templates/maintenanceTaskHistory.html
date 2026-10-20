@@ -17,10 +17,13 @@
 
         <!-------- FILTERS --------->
         <div class="container px-0">
-            <div class="d-flex justify-content-between align-items-center py-3 px-4">
-                 <div class="col-md-7">
+            <div class="d-flex flex-wrap justify-content-between align-items-center py-2 px-2">
+                <div>
+                    <h1 class="fs-4 text-secondary">Kunnossapitohistoria</h1>
+                </div>
+                 <div class="col-md-6">
                     <form th:action="@{/maintenanceTaskHistory}" method="get" class="row align-items-center">
-                        <div class="col-md-5 d-flex align-items-center gap-2 mt-0 p-1">
+                        <div class="col-md-6 d-flex align-items-center gap-2 mt-0 p-1">
                             <label class="form-label mb-0">Kategoria:</label>
                             <select name="categoryId" class="form-select" onchange="this.form.submit()">
                                 <option value="">Kaikki kategoriat</option>
@@ -42,7 +45,7 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="col-md-2 gap-2 mt-0 p-1 ps-2">
+                        <div class="col-md-1 gap-2 mt-0 p-1 ps-2">
                             <a th:if="${selectedCategoryId != null or selectedTargetId != null}" 
                                 th:href="@{/maintenanceTaskHistory}" 
                                 title="Tyhjennä suodatukset">
@@ -51,9 +54,6 @@
                         </div>
                     </form>
                 </div>
-               <!--  <div>
-                    <a th:href="@{/addMaintenanceTask(planned=false)}" class="btn btn-primary text-nowrap px-3"><i class="bi-plus-lg"></i> Huoltotyö</a>
-                </div> -->
             </div>
         </div>
 
