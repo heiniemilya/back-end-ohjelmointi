@@ -45,6 +45,7 @@ public class MaintenanceTaskController {
         List<MaintenanceTask> tasks;
         tasks = maintenanceTaskRepository.findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
         model.addAttribute("tasks", tasks);
+        model.addAttribute("plannedTasks", maintenanceTaskRepository.findByIsPlannedTrueOrderByTaskYearAsc());
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
         return "index";
@@ -99,21 +100,24 @@ public class MaintenanceTaskController {
     // Save and validate new maintenance task
     @PostMapping("/saveAndValidate")
     public String saveAndValidate(@Valid @ModelAttribute("task") MaintenanceTask task, BindingResult bindingResult, Model model) {
-        // Validation for task performer
-        boolean selfPerformed = Boolean.TRUE.equals(task.getIsSelfPerformed());
-        boolean hasContractor = task.getContractor() != null && !task.getContractor().trim().isEmpty();
-        boolean hasBusinessId = task.getContractorBusinessId() != null && !task.getContractorBusinessId().trim().isEmpty();
-        // Error if both options are selected 
-        if (selfPerformed && (hasContractor || hasBusinessId)) {
-            bindingResult.rejectValue("contractor", "error.contractor", "Valitse joko 'Tehty itse' tai ilmoita urakoitsija, ei molempia.");
-        }
-        // Error if nothing is selected
-        if (!selfPerformed && !hasContractor && !hasBusinessId) {
-            bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita urakoitsija tai merkitse työ itse tehdyksi.");
-        }
-        // Error if business id but no contractor
-        if ((!selfPerformed && hasBusinessId && !hasContractor) || (selfPerformed && hasBusinessId && !hasContractor)) {
-            bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita myös urakoitsijan nimi, jos annat Y-tunnuksen.");
+        // Check task performer information only if task is not planned
+        if (!Boolean.TRUE.equals(task.getIsPlanned())) {
+            // Validation for task performer
+            boolean selfPerformed = Boolean.TRUE.equals(task.getIsSelfPerformed());
+            boolean hasContractor = task.getContractor() != null && !task.getContractor().trim().isEmpty();
+            boolean hasBusinessId = task.getContractorBusinessId() != null && !task.getContractorBusinessId().trim().isEmpty();
+            // Error if both options are selected 
+            if (selfPerformed && (hasContractor || hasBusinessId)) {
+                bindingResult.rejectValue("contractor", "error.contractor", "Valitse joko 'Tehty itse' tai ilmoita urakoitsija, ei molempia.");
+            }
+            // Error if nothing is selected
+            if (!selfPerformed && !hasContractor && !hasBusinessId) {
+                bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita urakoitsija tai merkitse työ itse tehdyksi.");
+            }
+            // Error if business id but no contractor
+            if ((!selfPerformed && hasBusinessId && !hasContractor) || (selfPerformed && hasBusinessId && !hasContractor)) {
+                bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita myös urakoitsijan nimi, jos annat Y-tunnuksen.");
+            }
         }
         if (bindingResult.hasErrors()) {
             log.error("Validation error happened, task: " + task);
@@ -124,14 +128,20 @@ public class MaintenanceTaskController {
         }
         log.info("Validation passed, saving task: " + task);
         maintenanceTaskRepository.save(task);
-        return "redirect:/maintenanceTaskHistory";
+        return "redirect:/index";
     }
 
     // Edit maintenance task by ID
     @GetMapping("/edit/{id}")
-    public String editMaintenanceTask(@PathVariable Long id, Model model) {
+    public String editMaintenanceTask(@PathVariable Long id, 
+                       @RequestParam(required = false, defaultValue = "false") boolean markCompleted, 
+                       Model model) {
         log.info("editMaintenanceTask() called with ID: {}", id);
-        MaintenanceTask task = maintenanceTaskRepository.findById(id).get();
+        MaintenanceTask task = maintenanceTaskRepository.findById(id).orElseThrow();
+        // Check if "mark completed" button has been pressed
+        if (markCompleted) {
+            task.setIsPlanned(false);
+        }
         model.addAttribute("taskToEdit", task);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
@@ -141,21 +151,24 @@ public class MaintenanceTaskController {
     // Save and validate edited maintenance task
     @PostMapping("/saveEditedTask")
     public String saveEditedTask(@Valid @ModelAttribute("taskToEdit") MaintenanceTask taskToEdit, BindingResult bindingResult, Model model) {
-         // Validation for task performer
-        boolean selfPerformed = Boolean.TRUE.equals(taskToEdit.getIsSelfPerformed());
-        boolean hasContractor = taskToEdit.getContractor() != null && !taskToEdit.getContractor().trim().isEmpty();
-        boolean hasBusinessId = taskToEdit.getContractorBusinessId() != null && !taskToEdit.getContractorBusinessId().trim().isEmpty();
-        // Error if both options are selected 
-        if (selfPerformed && (hasContractor || hasBusinessId)) {
-            bindingResult.rejectValue("contractor", "error.contractor", "Valitse joko 'Tehty itse' tai ilmoita urakoitsija, ei molempia.");
-        }
-        // Error if nothing is selected
-        if (!selfPerformed && !hasContractor && !hasBusinessId) {
-            bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita urakoitsija tai merkitse työ itse tehdyksi.");
-        }
-        // Error if business id but no contractor
-        if ((!selfPerformed && hasBusinessId && !hasContractor) || (selfPerformed && hasBusinessId && !hasContractor)) {
-            bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita myös urakoitsijan nimi, jos annat Y-tunnuksen.");
+        // Check task performer information only if task is not planned
+        if (!Boolean.TRUE.equals(taskToEdit.getIsPlanned())) {
+            // Validation for task performer
+            boolean selfPerformed = Boolean.TRUE.equals(taskToEdit.getIsSelfPerformed());
+            boolean hasContractor = taskToEdit.getContractor() != null && !taskToEdit.getContractor().trim().isEmpty();
+            boolean hasBusinessId = taskToEdit.getContractorBusinessId() != null && !taskToEdit.getContractorBusinessId().trim().isEmpty();
+            // Error if both options are selected 
+            if (selfPerformed && (hasContractor || hasBusinessId)) {
+                bindingResult.rejectValue("contractor", "error.contractor", "Valitse joko 'Tehty itse' tai ilmoita urakoitsija, ei molempia.");
+            }
+            // Error if nothing is selected
+            if (!selfPerformed && !hasContractor && !hasBusinessId) {
+                bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita urakoitsija tai merkitse työ itse tehdyksi.");
+            }
+            // Error if business id but no contractor
+            if ((!selfPerformed && hasBusinessId && !hasContractor) || (selfPerformed && hasBusinessId && !hasContractor)) {
+                bindingResult.rejectValue("contractor", "error.contractor", "Ilmoita myös urakoitsijan nimi, jos annat Y-tunnuksen.");
+            }
         }
         if (bindingResult.hasErrors()) {
             log.error("Validation error happened, edited task: " + taskToEdit);
