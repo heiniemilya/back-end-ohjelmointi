@@ -9,18 +9,15 @@
   </head>
   <body>
 
-    <div class="my-2 mx-3 d-flex justify-content-between align-items-end">
-        <a th:href="@{/index}" class="text-decoration-none text-dark fs-2 fw-bold">
-            Huolto<span class="text-primary fw-normal">vahti</span>
-        </a>
-    </div>
+    <!--Nav from fragments-->
+    <div th:replace="~{fragments :: navbar}"></div>
 
     <div class="container my-5">
         <div class="row g-4">
             <!-------- MAINTENANCE HISTORY --------->
             <div class="col-xl-8"> 
                 <div class="ps-2">
-                    <h3 class="text-secondary fw-light">Viimeisimmät huoltotyöt</h3>
+                    <h1 class="text-secondary fw-light fs-4">Viimeisimmät huoltotyöt</h1>
                 </div>
                
                 <!-------- MAINTENANCE TASK TABLE --------->
@@ -82,7 +79,7 @@
 
             <!-------- PLANNED MAINTENANCE TASKS TABLE --------->
             <div class="col-xl-4">
-                <h3 class="ps-2 text-secondary fw-light">Kunnossapitosuunnitelma</h3>
+                <h1 class="ps-2 text-secondary fw-light fs-4">Kunnossapitosuunnitelma</h1>
                 <div class="table-responsive rounded-4 overflow-x-auto shadow-sm">
                     <table class="table table-hover table-borderless mb-0 ">
                         <thead>
@@ -93,7 +90,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each = "task : ${tasks}" class="border-bottom align-middle table-light">
+                            <tr th:each = "task : ${plannedTasks}" class="border-bottom align-middle table-light">
                                 <!-- Year & Timeframe -->
                                 <td class="ps-3">
                                     <div th:text="${task.taskYear}" class="fw-bold"></div>
