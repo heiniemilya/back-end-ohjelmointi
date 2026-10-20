@@ -60,7 +60,7 @@ public class MaintenanceTask {
     private Category category; 
 
     // Many-to-Many: MaintenanceTask -> MaintenanceTarget
-    @NotEmpty(message = "Valitse huollettu kohde")
+    @NotEmpty(message = "Valitse kohde")
     @ManyToMany
     @JoinTable(
         name = "task_target",
@@ -68,6 +68,11 @@ public class MaintenanceTask {
         inverseJoinColumns = @JoinColumn(name = "target_id")
     )
     private List<MaintenanceTarget> targets = new ArrayList<>(); 
+    
+    // Many-to-One: MaintenanceTask -> AppUser
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser createdBy; 
 
     // Default constructor
     public MaintenanceTask() {
