@@ -83,6 +83,19 @@ public class HuoltovahtiApplication {
 			task3.getTargets().add(target2);
 			task3.getTargets().add(target3);
 			maintenanceTaskRepository.save(task3);
+
+			// Add Planned Maintenance Tasks
+			MaintenanceTask task4 = new MaintenanceTask("Jätekatoksen uusinta", null, 2029, 
+				null, true, "Taloyhtiö", true, 
+				null, null, null, category7);
+			task4.getTargets().add(target4);
+			maintenanceTaskRepository.save(task4);
+
+			MaintenanceTask task5 = new MaintenanceTask("Parkkipaikan asfaltointi", null, 2028, 
+				"kesä", true, "Taloyhtiö", true, 
+				null, null, null, category7);
+			task5.getTargets().add(target5);
+			maintenanceTaskRepository.save(task5);
 		};
 	}
 }
