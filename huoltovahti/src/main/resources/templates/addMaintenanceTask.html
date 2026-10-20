@@ -8,20 +8,27 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}" />
   </head>
   <body>
-    <div class="container my-5">
 
-        <div class="mb-5 d-flex justify-content-between align-items-end">
-            <a th:href="@{/index}" class="text-decoration-none text-dark fs-2 fw-bold">
-                Huolto<span class="text-primary fw-normal">vahti</span>
-            </a>
-        </div>
+    <!--Nav from fragments-->
+    <div th:replace="~{fragments :: navbar}"></div>
+
+    <div class="container my-5">
 
         <!-------- FORM --------->
          <div class="bg-light shadow-sm rounded-4 container mx-auto my-5 p-4" style="width: 700px;">
-            <h1 class="mb-4 fs-4 text-primary fw-bold">Uusi huoltotyö</h1>
+           
             <form class="row" th:object="${task}" th:action="@{saveAndValidate}" action="#" method="post">
+                <!-- Form title-->
+                <h1 class="mb-4 fs-4 text-primary fw-bold" th:unless="*{isPlanned}">Tehty huoltotyö</h1> 
+                <h1 class="mb-4 fs-4 text-primary fw-bold" th:if="*{isPlanned}">Suunniteltu huoltotyö</h1>
+
                 <!-- Hidden fields-->
                 <input type="hidden" th:field="*{isPlanned}" />
+                <div th:if="*{isPlanned}">
+                    <input type="hidden" name="responsibility" value="Taloyhtiö" />
+                    <input type="hidden" name="isPaidByCompany" value="true" />
+                </div>
+
                 <!--Targets-->
                 <div class="col-md-12 mb-3">
                     <label class="form-label opacity-75 fw-bold" for="targetlist">Kohteet:</label>
@@ -70,7 +77,7 @@
 
                 <div class="col-md-5 mb-3">
                     <!--Responsibility-->
-                    <div class="col-auto mb-3 pt-2">
+                    <div class="col-auto mb-3 pt-2" th:unless="*{isPlanned}">
                         <label class="form-label d-block opacity-75 fw-bold">Kunnossapitovastuu:</label>
                         <div class="form-check form-check-inline m-2 mt-0">
                             <input class="form-check-input" type="radio" th:field="*{responsibility}" id="shareholder" value="Osakas">
@@ -83,7 +90,7 @@
                         <div th:if="${#fields.hasErrors('responsibility')}" th:errors="*{responsibility}" class="text-danger small"></div>
                     </div>
                     <!--Paid by-->
-                    <div class="col-auto mb-3 pt-2">
+                    <div class="col-auto mb-3 pt-2" th:unless="*{isPlanned}">
                         <label class="form-label d-block opacity-75 fw-bold">Taloyhtiön rahoittama:</label>
                         <div class="form-check form-check-inline m-2 mt-0">
                             <input class="form-check-input" type="radio" th:field="*{isPaidByCompany}" id="notpaid" value="false">
@@ -97,23 +104,25 @@
                     </div>
                 </div>
 
-                <!--Year-->
-                <div class="col-md-2 mb-3 mt-2">
-                    <label class="form-label opacity-75 fw-bold" for="taskYear">Vuosi: </label>
-                    <input class="form-control" type="number" id="taskYear" th:field="*{taskYear}" />
-                    <span th:if="${#fields.hasErrors('taskYear')}" th:errors="*{taskYear}" class="text-danger small mt-1" >Error</span>
-                </div>
+                <!--Year and timeframe-->
+                <div class="row">
+                    <!--Year-->
+                    <div class="col-md-2 mb-3 mt-2">
+                        <label class="form-label opacity-75 fw-bold" for="taskYear">Vuosi: </label>
+                        <input class="form-control" type="number" id="taskYear" th:field="*{taskYear}" />
+                        <span th:if="${#fields.hasErrors('taskYear')}" th:errors="*{taskYear}" class="text-danger small mt-1" >Error</span>
+                    </div>
 
-                <!--Timeframe-->
-                <div class="col-md-5 mb-3 mt-2">
-                    <label class="form-label opacity-75 fw-bold" for="timeframe">Ajankohta: </label>
-                    <input class="form-control" type="text" id="timeframe" placeholder="esim. heinäkuu" th:field="*{timeframe}" />
-                    <span th:if="${#fields.hasErrors('timeframe')}" th:errors="*{timeframe}" class="text-danger small mt-1" >Error</span>
+                    <!--Timeframe-->
+                    <div class="col-md-5 mb-3 mt-2">
+                        <label class="form-label opacity-75 fw-bold" for="timeframe">Ajankohta: </label>
+                        <input class="form-control" type="text" id="timeframe" placeholder="esim. heinäkuu" th:field="*{timeframe}" />
+                        <span th:if="${#fields.hasErrors('timeframe')}" th:errors="*{timeframe}" class="text-danger small mt-1" >Error</span>
+                    </div>
                 </div>
-                <div class="col-md-4"></div>
 
                 <!--Performed by-->
-                <div class="col-md-12 mb-3 mt-2">
+                <div class="col-md-12 mb-3 mt-2" th:unless="*{isPlanned}">
                     <label class="form-label d-block opacity-75 fw-bold">Työn suorittaja:</label>
                    <!--Contractor and business id -->
                     <div class="input-group mb-3 pt-1">
