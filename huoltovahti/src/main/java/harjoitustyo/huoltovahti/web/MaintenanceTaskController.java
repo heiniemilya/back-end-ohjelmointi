@@ -1,5 +1,6 @@
 package harjoitustyo.huoltovahti.web;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -188,6 +189,27 @@ public class MaintenanceTaskController {
         log.info("deleteTask() called with ID: {}", id);
         maintenanceTaskRepository.deleteById(id);
         return "redirect:/index";
+    }
+
+    // My Maintenance Tasks page
+    @GetMapping("/myMaintenanceTasks")
+    public String getMyTasks(Principal principal, @RequestParam(required = false) Long categoryId, // for filtering
+                            Model model) {
+        // Filter maintenance tasks:
+        String username = principal.getName();
+        List<MaintenanceTask> userTasks = maintenanceTaskRepository.findByCreatedBy_Username(username); // tasks created by user
+        // Category selected
+        if (categoryId != null) {
+            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(username, categoryId);
+            log.info("maintenanceTaskHistory called with category id: " + categoryId);
+        // Nothing selected
+        } else {
+            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseOrderByTaskYearDescIdDesc(username);
+            log.info("maintenanceTaskHistory called with all categories and targets");
+        }
+        model.addAttribute("tasks", userTasks);
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "myMaintenanceTasks";
     }
 
 }

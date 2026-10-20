@@ -16,4 +16,10 @@ public interface MaintenanceTaskRepository extends CrudRepository<MaintenanceTas
     List<MaintenanceTask> findByIsPlannedFalseAndTargetsIdOrderByTaskYearDescIdDesc(Long targetId);
 
     List<MaintenanceTask> findByIsPlannedTrueOrderByTaskYearAsc();
+
+    List<MaintenanceTask> findByCreatedBy_Username(String username);
+
+    List<MaintenanceTask> findByCreatedBy_UsernameAndIsPlannedFalseOrderByTaskYearDescIdDesc(String username);
+
+    List<MaintenanceTask> findByCreatedBy_UsernameAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(String username, Long categoryId);
 }
