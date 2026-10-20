@@ -39,9 +39,7 @@ public class MaintenanceTaskController {
     
     // Index page
     @GetMapping({"/", "/index"})
-    public String showIndex(@RequestParam(required = false) Long categoryId,
-                            @RequestParam(required = false) Long targetId,
-                            Model model) {
+    public String showIndex(Model model) {
         List<MaintenanceTask> tasks;
         tasks = maintenanceTaskRepository.findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
         model.addAttribute("tasks", tasks);
@@ -53,8 +51,8 @@ public class MaintenanceTaskController {
 
     // Maintenance task history page
     @GetMapping({"/maintenanceTaskHistory"})
-    public String showMaintenanceTaskHistory(@RequestParam(required = false) Long categoryId,
-                            @RequestParam(required = false) Long targetId,
+    public String showMaintenanceTaskHistory(@RequestParam(required = false) Long categoryId, // for filtering
+                            @RequestParam(required = false) Long targetId, // for filtering
                             Model model) {
         // Filter maintenance tasks:
         List<MaintenanceTask> tasks;
@@ -86,11 +84,10 @@ public class MaintenanceTaskController {
 
     // Add new maintenance task
     @GetMapping("/addMaintenanceTask")
-    public String addMaintenanceTask(@RequestParam(required = false, defaultValue = "false") boolean planned, Model model) {
+    public String addMaintenanceTask(@RequestParam(required = false, defaultValue = "false") boolean planned, // false if "+ Huoltotyö" or true if "+ Suunniteltu huoltotyö"- button has been pressed in nav
+                                    Model model) {
         MaintenanceTask task = new MaintenanceTask();
-        // Set value for isPlanned
-        task.setIsPlanned(planned); 
-        
+        task.setIsPlanned(planned);  // Take parameter and set it's value for isPlanned 
         model.addAttribute("task", task);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
@@ -99,7 +96,9 @@ public class MaintenanceTaskController {
 
     // Save and validate new maintenance task
     @PostMapping("/saveAndValidate")
-    public String saveAndValidate(@Valid @ModelAttribute("task") MaintenanceTask task, BindingResult bindingResult, Model model) {
+    public String saveAndValidate(@Valid @ModelAttribute("task") MaintenanceTask task, 
+                                BindingResult bindingResult, 
+                                Model model) {
         // Check task performer information only if task is not planned
         if (!Boolean.TRUE.equals(task.getIsPlanned())) {
             // Validation for task performer
@@ -134,11 +133,11 @@ public class MaintenanceTaskController {
     // Edit maintenance task by ID
     @GetMapping("/edit/{id}")
     public String editMaintenanceTask(@PathVariable Long id, 
-                       @RequestParam(required = false, defaultValue = "false") boolean markCompleted, 
-                       Model model) {
+                                    @RequestParam(required = false, defaultValue = "false") boolean markCompleted, // "Merkitse valmiiksi" -button in editMaintenanceTask sets markCompleted to true
+                                    Model model) {
         log.info("editMaintenanceTask() called with ID: {}", id);
         MaintenanceTask task = maintenanceTaskRepository.findById(id).orElseThrow();
-        // Check if "mark completed" button has been pressed
+        // if markCompleted is true set isPlanned to false to open normal edit form to complete necessary information
         if (markCompleted) {
             task.setIsPlanned(false);
         }
@@ -150,7 +149,9 @@ public class MaintenanceTaskController {
 
     // Save and validate edited maintenance task
     @PostMapping("/saveEditedTask")
-    public String saveEditedTask(@Valid @ModelAttribute("taskToEdit") MaintenanceTask taskToEdit, BindingResult bindingResult, Model model) {
+    public String saveEditedTask(@Valid @ModelAttribute("taskToEdit") MaintenanceTask taskToEdit, 
+                                BindingResult bindingResult, 
+                                Model model) {
         // Check task performer information only if task is not planned
         if (!Boolean.TRUE.equals(taskToEdit.getIsPlanned())) {
             // Validation for task performer

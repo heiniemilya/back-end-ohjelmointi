@@ -29,7 +29,7 @@
                 <!-- Hidden fields-->
                 <input type="hidden" th:field="*{id}" />
                 <input type="hidden" th:field="*{isPlanned}" />
-                <div th:if="*{isPlanned}">
+                <div th:if="*{isPlanned}"> <!-- For Planned tasks only -->
                     <input type="hidden" name="responsibility" value="Taloyhtiö" />
                     <input type="hidden" name="isPaidByCompany" value="true" />
                 </div>
@@ -80,7 +80,7 @@
                     <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" class="text-danger" >Error</span>
                 </div>
 
-                <div class="col-md-5 mb-3" th:unless="*{isPlanned}">
+                <div class="col-md-5 mb-3" th:unless="*{isPlanned}"> <!-- Hide for Planned tasks -->
                     <!--Responsibility-->
                     <div class="col-auto mb-3 pt-2">
                         <label class="form-label d-block opacity-75 fw-bold">Kunnossapitovastuu:</label>
@@ -127,7 +127,7 @@
                 </div>
 
                 <!--Performed by-->
-                <div class="col-md-12 mb-3 mt-2" th:unless="*{isPlanned}">
+                <div class="col-md-12 mb-3 mt-2" th:unless="*{isPlanned}"> <!-- Hide for Planned tasks -->
                     <label class="form-label d-block opacity-75 fw-bold">Työn suorittaja:</label>
                    <!--Contractor and business id -->
                     <div class="input-group mb-3 pt-1">
