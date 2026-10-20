@@ -80,7 +80,7 @@ public class MaintenanceTask {
 
     // Constructor
     public MaintenanceTask(String title, String description, Integer year, String timeframe, Boolean isPlanned, 
-            String responsibility, Boolean isPaidByCompany, Boolean isSelfPerformed, String contractor, String contractorBusinessId, Category category) {
+            String responsibility, Boolean isPaidByCompany, Boolean isSelfPerformed, String contractor, String contractorBusinessId, Category category, AppUser createdBy) {
         this.title = title;
         this.description = description;
         this.taskYear = year;
@@ -92,6 +92,7 @@ public class MaintenanceTask {
         this.contractor = contractor;
         this.contractorBusinessId = contractorBusinessId;
         this.category = category;
+        this.createdBy = createdBy;
     }
 
     // Getters and Setters
@@ -197,6 +198,14 @@ public class MaintenanceTask {
 
     public void setTargets(List<MaintenanceTarget> targets) {
         this.targets = targets;
+    }
+
+    public AppUser getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(AppUser createdBy) {
+        this.createdBy = createdBy;
     }
 
     @Override
