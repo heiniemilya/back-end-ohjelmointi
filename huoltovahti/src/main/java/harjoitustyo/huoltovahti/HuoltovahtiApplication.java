@@ -5,6 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import harjoitustyo.huoltovahti.domain.AppUser;
+import harjoitustyo.huoltovahti.domain.AppUserRepository;
 import harjoitustyo.huoltovahti.domain.Category;
 import harjoitustyo.huoltovahti.domain.CategoryRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTarget;
@@ -22,7 +24,7 @@ public class HuoltovahtiApplication {
 	// Add demo data to H2 database
 	@Bean
 	public CommandLineRunner demo(CategoryRepository categoryRepository, MaintenanceTaskRepository maintenanceTaskRepository, 
-			MaintenanceTargetRepository maintenanceTargetRepository) {
+			MaintenanceTargetRepository maintenanceTargetRepository, AppUserRepository appUserRepository) {
 		return (args) -> {
 
 			// Add categories
@@ -96,6 +98,12 @@ public class HuoltovahtiApplication {
 				null, null, null, category7);
 			task5.getTargets().add(target5);
 			maintenanceTaskRepository.save(task5);
+
+			// Add users
+			AppUser user1 = new AppUser("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER");
+			AppUser user2 = new AppUser("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN");
+			appUserRepository.save(user1);
+			appUserRepository.save(user2);
 		};
 	}
 }
