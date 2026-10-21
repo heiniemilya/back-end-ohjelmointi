@@ -156,7 +156,7 @@ public class MaintenanceTask {
         return isPaidByCompany;
     }
 
-    public void setIsPaidByCompany(boolean isPaidByCompany) {
+    public void setIsPaidByCompany(Boolean isPaidByCompany) {
         this.isPaidByCompany = isPaidByCompany;
     }
 
@@ -164,7 +164,7 @@ public class MaintenanceTask {
         return isSelfPerformed;
     }
 
-    public void setIsSelfPerformed(boolean isSelfPerformed) {
+    public void setIsSelfPerformed(Boolean isSelfPerformed) {
         this.isSelfPerformed = isSelfPerformed;
     }
 

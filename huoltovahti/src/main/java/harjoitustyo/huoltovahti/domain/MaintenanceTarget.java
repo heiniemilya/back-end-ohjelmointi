@@ -21,7 +21,7 @@ public class MaintenanceTarget {
     @NotBlank(message = "Target is required")
     private String name; // esim. "Talo A", "Jätekatos", "Pysäköintialue"
 
-    private boolean isCommonArea; // Kuuluuko kohde yhteisiin vai yksityisiin tiloihin
+    private Boolean isCommonArea; // Kuuluuko kohde yhteisiin vai yksityisiin tiloihin
 
     @JsonIgnore
     @ManyToMany(mappedBy = "targets")
@@ -32,7 +32,7 @@ public class MaintenanceTarget {
     }
 
     // Constructor
-    public MaintenanceTarget(String name, boolean isCommonArea) {
+    public MaintenanceTarget(String name, Boolean isCommonArea) {
         this.name = name;
         this.isCommonArea = isCommonArea;
     }
@@ -54,11 +54,11 @@ public class MaintenanceTarget {
         this.name = name;
     }
 
-    public boolean isCommonArea() {
+    public Boolean isCommonArea() {
         return isCommonArea;
     }
 
-    public void setCommonArea(boolean isCommonArea) {
+    public void setCommonArea(Boolean isCommonArea) {
         this.isCommonArea = isCommonArea;
     }
 
