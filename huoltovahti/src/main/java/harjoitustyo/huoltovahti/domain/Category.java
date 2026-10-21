@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +20,7 @@ public class Category {
 
     // One-to-Many: Category -> MaintenanceTask
     @JsonIgnore 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy ="category")
+    @OneToMany(mappedBy ="category")
     private List<MaintenanceTask> tasks;
 
     // Default constructor
