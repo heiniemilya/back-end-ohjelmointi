@@ -49,7 +49,7 @@ public class MaintenanceTaskController {
     @GetMapping({"/", "/index"})
     public String showIndex(Model model) {
         List<MaintenanceTask> tasks;
-        tasks = maintenanceTaskRepository.findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
+        tasks = maintenanceTaskRepository.findTop8ByIsPlannedFalseOrderByTaskYearDescIdDesc();
         model.addAttribute("tasks", tasks);
         model.addAttribute("plannedTasks", maintenanceTaskRepository.findByIsPlannedTrueOrderByTaskYearAsc());
         model.addAttribute("categories", categoryRepository.findAll());
