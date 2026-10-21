@@ -5,21 +5,29 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MaintenanceTaskRepository extends CrudRepository<MaintenanceTask, Long> {
+
+    // find 10 most recent old tasks / Index
     List<MaintenanceTask> findTop10ByIsPlannedFalseOrderByTaskYearDescIdDesc();
 
-    List<MaintenanceTask> findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
-
-    List<MaintenanceTask> findByIsPlannedFalseAndCategoryIdAndTargetsIdOrderByTaskYearDescIdDesc(Long categoryId, Long targetId);
-
-    List<MaintenanceTask> findByIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(Long categoryId);
-
-    List<MaintenanceTask> findByIsPlannedFalseAndTargetsIdOrderByTaskYearDescIdDesc(Long targetId);
-
+    // find planned tasks / Index
     List<MaintenanceTask> findByIsPlannedTrueOrderByTaskYearAsc();
 
-    List<MaintenanceTask> findByCreatedBy_Username(String username);
+    // find all old tasks / MaintenanceTaskHistory
+    List<MaintenanceTask> findAllByIsPlannedFalseOrderByTaskYearDescIdDesc();
 
-    List<MaintenanceTask> findByCreatedBy_UsernameAndIsPlannedFalseOrderByTaskYearDescIdDesc(String username);
+    // find old tasks with specific category and target / MaintenanceTaskHistory
+    List<MaintenanceTask> findByIsPlannedFalseAndCategoryIdAndTargetsIdOrderByTaskYearDescIdDesc(Long categoryId, Long targetId);
 
-    List<MaintenanceTask> findByCreatedBy_UsernameAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(String username, Long categoryId);
+    // find old tasks with specific category / MaintenanceTaskHistory
+    List<MaintenanceTask> findByIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(Long categoryId);
+
+    // find old tasks with specific target / MaintenanceTaskHistory
+    List<MaintenanceTask> findByIsPlannedFalseAndTargetsIdOrderByTaskYearDescIdDesc(Long targetId);
+
+    // find specific houses old tasks / MyMaintenanceTasks
+    List<MaintenanceTask> findByTargetsContainsAndIsPlannedFalseOrderByTaskYearDescIdDesc(MaintenanceTarget target);
+
+    // find specific houses old tasks with specific category / MyMaintenanceTasks
+    List<MaintenanceTask> findByTargetsContainsAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(MaintenanceTarget target, Long categoryId);
+
 }

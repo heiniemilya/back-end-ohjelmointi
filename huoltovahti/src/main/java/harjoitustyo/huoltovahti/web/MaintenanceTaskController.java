@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import harjoitustyo.huoltovahti.domain.AppUser;
 import harjoitustyo.huoltovahti.domain.AppUserRepository;
 import harjoitustyo.huoltovahti.domain.CategoryRepository;
+import harjoitustyo.huoltovahti.domain.MaintenanceTarget;
 import harjoitustyo.huoltovahti.domain.MaintenanceTargetRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTask;
 import harjoitustyo.huoltovahti.domain.MaintenanceTaskRepository;
@@ -93,20 +94,21 @@ public class MaintenanceTaskController {
     /////////////////////////   MY MAINTENANCE TASKS PAGE   /////////////////////////  
     
     @GetMapping("/myMaintenanceTasks")
-    public String getMyTasks(Principal principal, @RequestParam(required = false) Long categoryId, // for filtering
+    public String getMyTasks(Principal principal,
+                            @RequestParam(required = false) Long categoryId, // for filtering
                             Model model) {
+        AppUser user = appUserRepository.findByUsername(principal.getName());
+        MaintenanceTarget userHouse = user.getUserHouse(); // house connected to user
+        List<MaintenanceTask> userTasks;                      
         // Filter maintenance tasks:
-        String username = principal.getName();
-        List<MaintenanceTask> userTasks = maintenanceTaskRepository.findByCreatedBy_Username(username); // tasks created by user
-        // Category selected
-        if (categoryId != null) {
-            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(username, categoryId);
+        if (categoryId != null) {   // Category selected
+            userTasks = maintenanceTaskRepository.findByTargetsContainsAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(userHouse, categoryId);
             log.info("maintenanceTaskHistory called with category id: " + categoryId);
-        // Nothing selected
-        } else {
-            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseOrderByTaskYearDescIdDesc(username);
+        } else { // Nothing selected
+            userTasks = maintenanceTaskRepository.findByTargetsContainsAndIsPlannedFalseOrderByTaskYearDescIdDesc(userHouse);
             log.info("maintenanceTaskHistory called with all categories and targets");
         }
+        model.addAttribute("selectedCategoryId", categoryId); // Save selected filter value
         model.addAttribute("tasks", userTasks);
         model.addAttribute("categories", categoryRepository.findAll());
         return "myMaintenanceTasks";

@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 
@@ -33,15 +35,20 @@ public class AppUser {
     @OneToMany(cascade = CascadeType.ALL, mappedBy ="createdBy")
     private List<MaintenanceTask> maintanenceTasks;
 
+    @ManyToOne
+    @JoinColumn(name = "target_id")
+    private MaintenanceTarget userHouse; // Users own house
+
     // Default constructor
     public AppUser() {
     }
 
     // Constructor
-    public AppUser(String username, String passwordHash, String role) {
+    public AppUser(String username, String passwordHash, String role, MaintenanceTarget userHouse) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
+        this.userHouse = userHouse;
     }
 
     // Getters and setters
@@ -83,6 +90,14 @@ public class AppUser {
 
     public void setMaintanenceTasks(List<MaintenanceTask> maintanenceTasks) {
         this.maintanenceTasks = maintanenceTasks;
+    }
+
+    public MaintenanceTarget getUserHouse() {
+        return userHouse;
+    }
+
+    public void setUserHouse(MaintenanceTarget userHouse) {
+        this.userHouse = userHouse;
     }
 
 }
