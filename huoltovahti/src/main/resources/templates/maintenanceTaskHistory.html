@@ -106,7 +106,11 @@
                         </td>
                         <!-- Edit -->
                         <td>
-                            <i><a th:href="@{/edit/{id}(id=${task.id})}" class="bi bi-pencil-square text-primary fs-5" title="Muokkaa"></a></i>
+                            <i><a th:if="${#authorization.expression('hasAuthority(''ADMIN'')') or (task.createdBy != null and task.createdBy.username == #authentication.name)}"
+                                th:href="@{/edit/{id}(id=${task.id})}" 
+                                class="bi bi-pencil-square text-primary fs-5 pe-2" 
+                                title="Muokkaa">
+                            </a></i>
                         </td>
                     </tr>
                 </tbody>

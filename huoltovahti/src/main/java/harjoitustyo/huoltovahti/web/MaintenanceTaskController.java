@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import harjoitustyo.huoltovahti.domain.AppUser;
+import harjoitustyo.huoltovahti.domain.AppUserRepository;
 import harjoitustyo.huoltovahti.domain.CategoryRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTargetRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTask;
@@ -28,17 +31,20 @@ public class MaintenanceTaskController {
 
     // Constructor injection for repositories
     public MaintenanceTaskController(MaintenanceTaskRepository maintenanceTaskRepository, CategoryRepository categoryRepository, 
-            MaintenanceTargetRepository maintenanceTargetRepository) {
+            MaintenanceTargetRepository maintenanceTargetRepository, AppUserRepository appUserRepository) {
         this.maintenanceTaskRepository = maintenanceTaskRepository;
         this.categoryRepository = categoryRepository;
         this.maintenanceTargetRepository = maintenanceTargetRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     private final MaintenanceTaskRepository maintenanceTaskRepository;
     private final CategoryRepository categoryRepository;
     private final MaintenanceTargetRepository maintenanceTargetRepository;
+    private final AppUserRepository appUserRepository;
     
-    // Index page
+    /////////////////////////   INDEX PAGE  /////////////////////////
+    
     @GetMapping({"/", "/index"})
     public String showIndex(Model model) {
         List<MaintenanceTask> tasks;
@@ -50,7 +56,8 @@ public class MaintenanceTaskController {
         return "index";
     }   
 
-    // Maintenance task history page
+    /////////////////////////   MAINTENANCE TASK HISTORY PAGE   /////////////////////////
+    
     @GetMapping({"/maintenanceTaskHistory"})
     public String showMaintenanceTaskHistory(@RequestParam(required = false) Long categoryId, // for filtering
                             @RequestParam(required = false) Long targetId, // for filtering
@@ -83,7 +90,30 @@ public class MaintenanceTaskController {
         return "maintenanceTaskHistory";
     }   
 
-    // Add new maintenance task
+    /////////////////////////   MY MAINTENANCE TASKS PAGE   /////////////////////////  
+    
+    @GetMapping("/myMaintenanceTasks")
+    public String getMyTasks(Principal principal, @RequestParam(required = false) Long categoryId, // for filtering
+                            Model model) {
+        // Filter maintenance tasks:
+        String username = principal.getName();
+        List<MaintenanceTask> userTasks = maintenanceTaskRepository.findByCreatedBy_Username(username); // tasks created by user
+        // Category selected
+        if (categoryId != null) {
+            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(username, categoryId);
+            log.info("maintenanceTaskHistory called with category id: " + categoryId);
+        // Nothing selected
+        } else {
+            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseOrderByTaskYearDescIdDesc(username);
+            log.info("maintenanceTaskHistory called with all categories and targets");
+        }
+        model.addAttribute("tasks", userTasks);
+        model.addAttribute("categories", categoryRepository.findAll());
+        return "myMaintenanceTasks";
+    }
+
+    /////////////////////////  ADD NEW MAINTENANCE TASK   /////////////////////////  
+    
     @GetMapping("/addMaintenanceTask")
     public String addMaintenanceTask(@RequestParam(required = false, defaultValue = "false") boolean planned, // false if "+ Huoltotyö" or true if "+ Suunniteltu huoltotyö"- button has been pressed in nav
                                     Model model) {
@@ -95,11 +125,24 @@ public class MaintenanceTaskController {
         return "addMaintenanceTask";
     }
 
-    // Save and validate new maintenance task
+    /////////////////////////   SAVE AND VALIDATE NEW MAINTENANCE TASK   /////////////////////////
+    
     @PostMapping("/saveAndValidate")
     public String saveAndValidate(@Valid @ModelAttribute("task") MaintenanceTask task, 
                                 BindingResult bindingResult, 
+                                Principal principal,
                                 Model model) {
+        // if saving new task set current user to createdBy
+        if (task.getId() == null) {
+            AppUser currentUser = appUserRepository.findByUsername(principal.getName());
+            task.setCreatedBy(currentUser);
+        } else {
+            // if saving existing task get original creator
+            MaintenanceTask existingTask = maintenanceTaskRepository.findById(task.getId()).orElse(null);
+            if (existingTask != null) {
+                task.setCreatedBy(existingTask.getCreatedBy());
+            }
+        }
         // Check task performer information only if task is not planned
         if (!Boolean.TRUE.equals(task.getIsPlanned())) {
             // Validation for task performer
@@ -131,9 +174,11 @@ public class MaintenanceTaskController {
         return "redirect:/index";
     }
 
-    // Edit maintenance task by ID
+    /////////////////////////  EDIT MAINTENANCE TASK BY ID  /////////////////////////  
+    
+    @PreAuthorize("hasRole('ADMIN') or @maintenanceTaskRepository.findById(#id).orElse(null)?.createdBy?.username == authentication.name") // Allow access to edit only if user has created the task or user is Admin 
     @GetMapping("/edit/{id}")
-    public String editMaintenanceTask(@PathVariable Long id, 
+    public String editMaintenanceTask(@PathVariable Long id,
                                     @RequestParam(required = false, defaultValue = "false") boolean markCompleted, // "Merkitse valmiiksi" -button in editMaintenanceTask sets markCompleted to true
                                     Model model) {
         log.info("editMaintenanceTask() called with ID: {}", id);
@@ -145,10 +190,11 @@ public class MaintenanceTaskController {
         model.addAttribute("taskToEdit", task);
         model.addAttribute("categories", categoryRepository.findAll());
         model.addAttribute("targets", maintenanceTargetRepository.findAll());
-        return "/editMaintenanceTask";
+        return "editMaintenanceTask";
     }
 
-    // Save and validate edited maintenance task
+    /////////////////////////   SAVE AND VALIDATE EDITED MAINTENANCE TASK   /////////////////////////  
+    
     @PostMapping("/saveEditedTask")
     public String saveEditedTask(@Valid @ModelAttribute("taskToEdit") MaintenanceTask taskToEdit, 
                                 BindingResult bindingResult, 
@@ -183,33 +229,14 @@ public class MaintenanceTaskController {
         return "redirect:/index";
     }
 
-    // Delete maintenance task by ID
+    /////////////////////////   DELETE MAINTENANCE TASK BY ID   /////////////////////////  
+    
+    @PreAuthorize("hasRole('ADMIN') or @maintenanceTaskRepository.findById(#id).orElse(null)?.createdBy?.username == authentication.name") // Allow access to delete only if user has created the task or user is Admin 
     @GetMapping("/delete/{id}")
     public String deleteTask(@PathVariable Long id) {
         log.info("deleteTask() called with ID: {}", id);
         maintenanceTaskRepository.deleteById(id);
         return "redirect:/index";
-    }
-
-    // My Maintenance Tasks page
-    @GetMapping("/myMaintenanceTasks")
-    public String getMyTasks(Principal principal, @RequestParam(required = false) Long categoryId, // for filtering
-                            Model model) {
-        // Filter maintenance tasks:
-        String username = principal.getName();
-        List<MaintenanceTask> userTasks = maintenanceTaskRepository.findByCreatedBy_Username(username); // tasks created by user
-        // Category selected
-        if (categoryId != null) {
-            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseAndCategoryIdOrderByTaskYearDescIdDesc(username, categoryId);
-            log.info("maintenanceTaskHistory called with category id: " + categoryId);
-        // Nothing selected
-        } else {
-            userTasks = maintenanceTaskRepository.findByCreatedBy_UsernameAndIsPlannedFalseOrderByTaskYearDescIdDesc(username);
-            log.info("maintenanceTaskHistory called with all categories and targets");
-        }
-        model.addAttribute("tasks", userTasks);
-        model.addAttribute("categories", categoryRepository.findAll());
-        return "myMaintenanceTasks";
     }
 
 }

@@ -25,7 +25,7 @@
                     <li class="nav-item">
                         <a th:href="@{/maintenanceTaskHistory}" class="nav-link text-nowrap px-3">Kunnossapitohistoria</a>
                     </li>
-                    <li class="nav-item">
+                    <li sec:authorize="hasAuthority ('USER')" class="nav-item">
                         <a th:href="@{/myMaintenanceTasks}" class="nav-link text-nowrap px-3">Omat huoltotyöt</a>
                     </li>
                 </ul>
