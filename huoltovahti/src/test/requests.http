@@ -1,0 +1,83 @@
+@username = admin
+@password = admin
+
+GET http://localhost:8080/tasks
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://localhost:8080/categories
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://localhost:8080/targets
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://localhost:8080/tasks/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://localhost:8080/categories/1
+Authorization: Basic {{username}} {{password}}
+
+###
+GET http://localhost:8080/targets/1
+Authorization: Basic {{username}} {{password}}
+
+###
+# @name testTask
+POST http://localhost:8080/tasks
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+    "title": "Uusi huoltotyö",
+    "description": "Testataan toimiiko huoltotyön tallennus",
+    "taskYear": 2026,
+    "timeframe": "Syksy",
+    "isPlanned": false,
+    "responsibility": "Osakas",
+    "isPaidByCompany": false,
+    "isSelfPerformed": true,
+    "contractor": null,
+    "contractorBusinessId": null,
+    "category": { 
+        "id": 2 
+    },
+    "createdBy": {
+        "id": 2 
+    },
+    "targets": [
+        { "id": 2 }
+    ]
+}
+
+###
+@taskId = {{testTask.response.body.id}}
+
+###
+PUT http://localhost:8080/tasks/{{taskId}}
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
+{
+    "title": "Muokattu huoltotyö",
+    "description": "Testataan toimiiko huoltotyön muokkaus",
+    "taskYear": 2026,
+    "timeframe": "Syksy",
+    "isPlanned": false,
+    "responsibility": "Osakas",
+    "isPaidByCompany": false,
+    "isSelfPerformed": false,
+    "contractor": "Remppa Oy",
+    "contractorBusinessId": "7654321-8",
+    "category": { "id": 4 },
+    "targets": [ { "id": 1 } ],
+    "createdBy": { "id": 1 }
+}
+
+###
+DELETE http://localhost:8080/tasks/{{taskId}}
+Authorization: Basic {{username}} {{password}}
+Content-Type: application/json
+
