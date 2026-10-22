@@ -13,15 +13,15 @@
     <!--Nav from fragments-->
     <div th:replace="~{fragments :: navbar}"></div>
     
-    <div class="container my-5">
+    <div class="container-lg my-5">
 
         <!-------- FILTERS --------->
-        <div class="container px-0">
+        <div>
             <div class="d-flex flex-wrap justify-content-between align-items-center py-2 px-2">
-                <div>
-                    <h1 class="fs-4 text-secondary">Oman talon huoltotyöt</h1>
+                <div class="col-xxl-9 col-xl-8 col-lg-6 col-md-6">
+                    <h1 class="fs-4 fw-light">Oman talon huoltotyöt</h1>
                 </div>
-                 <div class="col-md-3">
+                 <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 ms-2 ms-sm-0">
                     <form th:action="@{/myMaintenanceTasks}" method="get" class="row align-items-center">
                         <div class="col-md-10 d-flex align-items-center gap-2 mt-0 p-1">
                             <label class="form-label mb-0">Kategoria:</label>
@@ -50,13 +50,13 @@
         <div class="table-responsive rounded-4 overflow-x-auto shadow-sm">
             <table class="table table-hover table-borderless mb-0 ">
                 <thead>
-                    <tr class="table-primary align-middle">
+                    <tr class="table-mytasks align-middle small">
                         <th class="ps-3">Ajankohta</th>
                         <th>Kohde</th>
                         <th>Huoltotyö</th>
                         <th>Työn suorittaja</th>
                         <th>Vastuu</th>
-                        <th>Yhtiön <br>rahoitus</th>
+                        <th>Yhtiön rahoitus</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -70,9 +70,7 @@
                         <!-- Target -->
                         <td>
                             <span th:each="target : ${task.targets}">
-                                <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
-                                class="badge bg-primary text-light text-decoration-none" 
-                                th:text="${target.name}"></a>
+                                <div class="badge bg-primary text-light text-decoration-none" th:text="${target.name}"></div>
                             </span>
                         </td>
                         <!-- Title & Description -->
