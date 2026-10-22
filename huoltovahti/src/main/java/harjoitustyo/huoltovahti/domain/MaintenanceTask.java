@@ -3,6 +3,7 @@ package harjoitustyo.huoltovahti.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +21,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 @Entity  // Represents a table in relational database 
+@Table(name = "maintenance_task")
 public class MaintenanceTask {
     @Id 
     @GeneratedValue(strategy = GenerationType.AUTO) // Automatically  generates a unique primary key for every new entity object
@@ -32,25 +35,30 @@ public class MaintenanceTask {
     @NotNull(message = "Lisää valmistumisvuosi")
     @Min(value = 1000, message = "Tarkista vuosiluku")
     @Max(value = 9999, message = "Tarkista vuosiluku")
+    @Column(name = "task_year")
     private Integer taskYear;
 
     private String timeframe;
 
+    @Column(name = "is_planned")
     private Boolean isPlanned;
 
     @NotNull(message = "Kenellä on kunnossapitovastuu?")
     private String responsibility;
     
     @NotNull(message = "Onko taloyhtiö rahoittanut huoltotyön?")
+    @Column(name = "is_paid_by_company")
     private Boolean isPaidByCompany;
 
     // Validation in MaintenanceTaskController
+    @Column(name = "is_self_performed")
     private Boolean isSelfPerformed; 
 
     // Validation in MaintenanceTaskController
     private String contractor;
 
     @Pattern(regexp = "^$|^\\d{7}-\\d$", message = "Y-tunnuksen muoto on 1234567-8")
+    @Column(name = "contractor_business_id")
     private String contractorBusinessId;
 
     // Many-to-One: MaintenanceTask -> Category
@@ -71,7 +79,7 @@ public class MaintenanceTask {
     
     // Many-to-One: MaintenanceTask -> AppUser
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "created_by_id")
     private AppUser createdBy; 
 
     // Default constructor

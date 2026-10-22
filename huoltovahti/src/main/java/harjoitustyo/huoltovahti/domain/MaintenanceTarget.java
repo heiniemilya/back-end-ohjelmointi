@@ -5,14 +5,17 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity  // Represents a table in relational database 
+@Table(name = "maintenance_target")
 public class MaintenanceTarget {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO) // Automatically generates a unique primary key for every new entity object
@@ -21,6 +24,7 @@ public class MaintenanceTarget {
     @NotBlank(message = "Target is required")
     private String name; // esim. "Talo A", "Jätekatos", "Pysäköintialue"
 
+    @Column(name = "is_common_area")
     private Boolean isCommonArea; // Kuuluuko kohde yhteisiin vai yksityisiin tiloihin
 
     @JsonIgnore

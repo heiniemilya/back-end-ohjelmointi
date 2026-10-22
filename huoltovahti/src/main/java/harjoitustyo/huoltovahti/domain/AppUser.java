@@ -14,7 +14,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 
-@Entity(name= "users")
+@Entity(name= "app_user")
 public class AppUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +32,7 @@ public class AppUser {
 
     @JsonIgnore 
     @OneToMany(mappedBy ="createdBy")
-    private List<MaintenanceTask> maintanenceTasks;
+    private List<MaintenanceTask> maintenanceTasks;
 
     @ManyToOne
     @JoinColumn(name = "target_id")
@@ -84,11 +84,11 @@ public class AppUser {
     }
 
     public List<MaintenanceTask> getMaintanenceTasks() {
-        return maintanenceTasks;
+        return maintenanceTasks;
     }
 
     public void setMaintanenceTasks(List<MaintenanceTask> maintanenceTasks) {
-        this.maintanenceTasks = maintanenceTasks;
+        this.maintenanceTasks = maintanenceTasks;
     }
 
     public MaintenanceTarget getUserHouse() {
