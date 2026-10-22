@@ -201,6 +201,11 @@ public class MaintenanceTaskController {
     public String saveEditedTask(@Valid @ModelAttribute("taskToEdit") MaintenanceTask taskToEdit, 
                                 BindingResult bindingResult, 
                                 Model model) {
+        // get original creator to set to createdBy
+        MaintenanceTask existingTask = maintenanceTaskRepository.findById(taskToEdit.getId()).orElse(null);
+        if (existingTask != null) {
+            taskToEdit.setCreatedBy(existingTask.getCreatedBy());
+        }
         // Check task performer information only if task is not planned
         if (!Boolean.TRUE.equals(taskToEdit.getIsPlanned())) {
             // Validation for task performer
