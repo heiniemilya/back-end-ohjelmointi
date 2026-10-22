@@ -28,6 +28,4 @@ WORKDIR /opt/app
 # Kopioi buildattu JAR-tiedosto
 COPY --from=builder /opt/app/app.jar /opt/app/app.jar
 
-EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "/opt/app/app.jar"]
