@@ -10,6 +10,8 @@ import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabas
 
 import harjoitustyo.huoltovahti.domain.Category;
 import harjoitustyo.huoltovahti.domain.CategoryRepository;
+import harjoitustyo.huoltovahti.domain.MaintenanceTarget;
+import harjoitustyo.huoltovahti.domain.MaintenanceTargetRepository;
 import harjoitustyo.huoltovahti.domain.MaintenanceTask;
 import harjoitustyo.huoltovahti.domain.MaintenanceTaskRepository;
 
@@ -19,6 +21,8 @@ public class MaintenanceTaskRepositoryTests {
     @Autowired
     private MaintenanceTaskRepository taskRepository;
     @Autowired
+    private MaintenanceTargetRepository targetRepository;
+    @Autowired
     private CategoryRepository categoryRepository;
 
     // Test to create a new task and save it to the repository
@@ -26,9 +30,12 @@ public class MaintenanceTaskRepositoryTests {
     public void createNewTask() {
         Category category = new Category("Testi kategoria");
         categoryRepository.save(category);
+        MaintenanceTarget target = new MaintenanceTarget("Testikohde", true);
+        targetRepository.save(target);
         MaintenanceTask task = new MaintenanceTask("Testi huoltotyö", "Testing testing", 2026, 
 				"Kesä", true, "Taloyhtiö", true, 
 				false, "Remppa Oy", "7654321-8", category, null);
+        task.setTargets(List.of(target));
         taskRepository.save(task);
         assertThat(task.getId()).isNotNull();
     }
