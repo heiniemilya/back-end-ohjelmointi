@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 public interface MaintenanceTaskRepository extends CrudRepository<MaintenanceTask, Long> {
+     List<MaintenanceTask> findByTitle(String title);
 
     // find 10 most recent old tasks / Index
     List<MaintenanceTask> findTop8ByIsPlannedFalseOrderByTaskYearDescIdDesc();
