@@ -43,7 +43,7 @@ CREATE TABLE maintenance_task (
     contractor VARCHAR(50),
     contractor_business_id VARCHAR(9),
     category_id  BIGINT REFERENCES category(id) NOT NULL,
-    created_by_id  BIGINT REFERENCES app_user(id) NOT NULL
+    created_by_id  BIGINT REFERENCES app_user(id)
 );
 
 -- task_target join table
