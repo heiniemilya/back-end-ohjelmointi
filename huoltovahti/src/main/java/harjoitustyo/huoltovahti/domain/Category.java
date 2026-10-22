@@ -13,7 +13,7 @@ import jakarta.persistence.OneToMany;
 @Entity  // Represents a table in relational database 
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // Automatically generates a unique primary key for every new entity object
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

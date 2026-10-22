@@ -18,7 +18,7 @@ import jakarta.validation.constraints.NotBlank;
 @Table(name = "maintenance_target")
 public class MaintenanceTarget {
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO) // Automatically generates a unique primary key for every new entity object
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Target is required")

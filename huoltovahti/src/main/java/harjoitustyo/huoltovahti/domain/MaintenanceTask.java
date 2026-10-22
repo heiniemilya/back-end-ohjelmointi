@@ -24,7 +24,7 @@ import jakarta.validation.constraints.Pattern;
 @Table(name = "maintenance_task")
 public class MaintenanceTask {
     @Id 
-    @GeneratedValue(strategy = GenerationType.AUTO) // Automatically  generates a unique primary key for every new entity object
+   @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
     @NotBlank(message = "Anna huoltotyölle ostikko")
