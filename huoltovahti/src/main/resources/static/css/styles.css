@@ -6,6 +6,8 @@ body{
   --bs-primary: #ac5a46; 
   --bs-primary-rgb: 172, 90, 70;
   --bs-secondary: #575757; 
+  --bs-owntasks: #dec7a4;
+  --bs-alltasks: #c2cdc1;
 }
 
 .btn-primary {
@@ -17,6 +19,16 @@ body{
   --bs-btn-active-border-color: #b76854;
 }
 
+.btn-outline-primary {
+  --bs-btn-color: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-bg: #9e503c;
+  --bs-btn-hover-border-color: #9e503c;
+  --bs-btn-active-bg: #b76854;
+  --bs-btn-active-border-color: #b76854;
+
+}
+
 .btn-secondary {
   --bs-btn-bg: var(--bs-secondary);
   --bs-btn-border-color: var(--bs-secondary);
@@ -26,6 +38,14 @@ body{
   --bs-btn-active-border-color: #3f3f3f;
 }
 
-.table-primary{
+.table-alltasks{
   --bs-table-bg: #c2cdc1;
+}
+
+.table-planned{
+  --bs-table-bg: #a8bed3;
+}
+
+.table-mytasks{
+  --bs-table-bg: #dec7a4;
 }
