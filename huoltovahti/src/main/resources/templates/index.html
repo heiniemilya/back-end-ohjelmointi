@@ -13,19 +13,38 @@
     <!--Nav from fragments-->
     <div th:replace="~{fragments :: navbar}"></div>
 
-    <div class="container my-5">
+    <div class="container-fluid my-5 px-3 px-xxl-5" style="max-width: 1600px;">
+        <!-- Welcome -->
+        <div class="mb-4 text-center">
+            <div class="container-fluid py-2">
+                <h1 class="display-6 fw-semibold">Tervetuloa Huoltovahtiin!</h1>
+                <p sec:authorize="hasAuthority ('USER')" class="mx-auto fs-6 text-muted">
+                    Täältä löydät taloyhtiön tulevat ja tehdyt kunnossapitotyöt. Osakkaana voit ilmoittaa omaan asuntoosi tehdyistä remonteista.
+                </p>
+                <p sec:authorize="hasAuthority ('ADMIN')" class="mx-auto fs-6 text-muted">
+                    Täältä löydät taloyhtiön kunnossapitotyöt. Hallituksen jäsenenä voit hallita taloyhtiössä tehtyjä tai suunnitelmissa olevia yhteisiä remontteja.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3 my-4">
+                    <a th:href="@{/maintenanceTaskHistory}" class="btn btn-outline-primary btn-lg rounded-4">Kaikki huoltotyöt</a>
+                    <a sec:authorize="hasAuthority ('USER')" th:href="@{/myMaintenanceTasks}" class="btn btn-outline-primary btn-lg rounded-4">Omat huoltotyöt</a>
+                    <a th:href="@{/addMaintenanceTask(planned=false)}" class="btn btn-primary btn-lg rounded-4">Ilmoita tehty huoltotyö</a>
+                    <a sec:authorize="hasAuthority ('ADMIN')" th:href="@{/addMaintenanceTask(planned=true)}" class="btn btn-primary btn-lg rounded-4">Ilmoita suunniteltu huoltotyö</a>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4">
             <!-------- MAINTENANCE HISTORY --------->
             <div class="col-xl-8"> 
-                <div class="ps-2">
-                    <h1 class="text-secondary fw-light fs-4">Viimeisimmät huoltotyöt</h1>
+                <div class="ps-2 py-2">
+                    <h1 class="fw-light fs-4">Viimeisimmät huoltotyöt</h1>
                 </div>
                
                 <!-------- MAINTENANCE TASK TABLE --------->
                 <div class="table-responsive rounded-4 overflow-x-auto shadow-sm">
                     <table class="table table-hover table-borderless mb-0 ">
                         <thead>
-                            <tr class="table-primary align-middle small">
+                            <tr class="table-alltasks align-middle small">
                                 <th class="ps-3">Ajankohta</th>
                                 <th>Kohde</th>
                                 <th>Huoltotyö</th>
@@ -45,9 +64,7 @@
                                 <!-- Target -->
                                 <td>
                                     <span th:each="target : ${task.targets}">
-                                        <a th:href="@{/target/{id}/tasks(id=${target.id})}" 
-                                        class="badge bg-primary text-light text-decoration-none" 
-                                        th:text="${target.name}"></a>
+                                       <div class="badge bg-primary text-light text-decoration-none" th:text="${target.name}"></div>
                                     </span>
                                 </td>
                                 <!-- Title & Description -->
@@ -80,12 +97,12 @@
             </div>
 
             <!-------- PLANNED MAINTENANCE TASKS TABLE --------->
-            <div class="col-xl-4">
-                <h1 class="ps-2 text-secondary fw-light fs-4">Kunnossapitosuunnitelma</h1>
+            <div class="col-xl-4" style="max-width: 600px;">
+                <h1 class="ps-2 py-2 fw-light fs-4">Kunnossapitosuunnitelma</h1>
                 <div class="table-responsive rounded-4 overflow-x-auto shadow-sm">
                     <table class="table table-hover table-borderless mb-0 ">
                         <thead>
-                            <tr class="table-primary align-middle small">
+                            <tr class="table-planned align-middle small">
                                 <th class="ps-3">Ajankohta</th>
                                 <th>Huoltotyö</th>
                                 <th></th>
