@@ -178,7 +178,7 @@ public class MaintenanceTaskController {
 
     /////////////////////////  EDIT MAINTENANCE TASK BY ID  /////////////////////////  
     
-    @PreAuthorize("hasRole('ADMIN') or @maintenanceTaskRepository.findById(#id).orElse(null)?.createdBy?.username == authentication.name") // Allow access to edit only if user has created the task or user is Admin 
+    @PreAuthorize("hasAuthority('ADMIN') or @maintenanceTaskRepository.findById(#id).orElse(null)?.createdBy?.username == authentication.name") // Allow access to edit only if user has created the task or user is Admin 
     @GetMapping("/edit/{id}")
     public String editMaintenanceTask(@PathVariable Long id,
                                     @RequestParam(required = false, defaultValue = "false") boolean markCompleted, // "Merkitse valmiiksi" -button in editMaintenanceTask sets markCompleted to true
