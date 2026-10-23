@@ -148,7 +148,7 @@
 
                 <!--Buttons-->
                 <div class="mt-4 col-12 d-flex justify-content-end gap-2">
-                    <a class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center" href="/index" role="button">Peruuta</a>
+                    <a class="btn btn-outline-secondary d-inline-flex align-items-center justify-content-center" href="javascript:history.back()" role="button">Peruuta</a>
                     <a sec:authorize="hasAuthority ('ADMIN')" th:if="*{isPlanned}" th:href="@{/edit/{id}(id=*{id}, markCompleted=true)}" class="btn btn-outline-success">
                         Merkitse valmiiksi ja täydennä tiedot
                     </a>
