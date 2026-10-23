@@ -169,7 +169,7 @@ public class MaintenanceTaskController {
             model.addAttribute("task", task);
             model.addAttribute("categories", categoryRepository.findAll());
             model.addAttribute("targets", maintenanceTargetRepository.findAll());
-            return "/addMaintenanceTask";
+            return "addMaintenanceTask";
         }
         log.info("Validation passed, saving task: " + task);
         maintenanceTaskRepository.save(task);
