@@ -8,7 +8,7 @@ public interface MaintenanceTaskRepository extends CrudRepository<MaintenanceTas
      List<MaintenanceTask> findByTitle(String title);
 
     // find 10 most recent old tasks / Index
-    List<MaintenanceTask> findTop8ByIsPlannedFalseOrderByTaskYearDescIdDesc();
+    List<MaintenanceTask> findTop6ByIsPlannedFalseOrderByTaskYearDescIdDesc();
 
     // find planned tasks / Index
     List<MaintenanceTask> findByIsPlannedTrueOrderByTaskYearAsc();
